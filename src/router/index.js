@@ -5,6 +5,7 @@ import CalendarPage from "@/pages/Calendar.vue";
 import LeavePage from "@/pages/Leave.vue";
 import ErrorPage from "@/pages/Error.vue";
 import AddEmployeePage from "@/pages/Add-Employee.vue";
+import EditEmployeePage from "@/pages/Edit-Employee.vue"
 import ImportExcelEmployee from "@/pages/Import-Excel.vue";
 
 const routes = [
@@ -37,6 +38,11 @@ const routes = [
     path: "/add-employee",
     name: "AddEmployee",
     component: AddEmployeePage,
+  },
+  {
+    path: "/edit-employee/:id",
+    name: "EditEmployee",
+    component: EditEmployeePage,
   },
   {
     path: "/import-excel-empoyee",

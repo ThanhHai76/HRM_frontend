@@ -6,8 +6,8 @@ async function getALLEmployees() {
 }
 
 async function createEmployee(employee) {
-  const { data } = await HTTP.post("/employee/create", employee);
-  return data;
+  const { data, status } = await HTTP.post("/employee/create", employee);
+  return { data, status };
 }
 
 async function getEmployee(id) {
@@ -15,9 +15,9 @@ async function getEmployee(id) {
   return data;
 }
 
-async function updateEmployee(id) {
-  const { data } = await HTTP.put(`/employee/update/${id}`);
-  return data;
+async function updateEmployee(id, employee) {
+  const { data, status } = await HTTP.put(`/employee/update/${id}`, employee);
+  return { data, status };
 }
 
 async function deleteEmployee(id) {

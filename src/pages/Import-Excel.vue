@@ -6,7 +6,7 @@
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="index.html"
+                <a href="/"
                   ><img
                     src="@/assets/img/dash.png"
                     class="mr-2"
@@ -14,9 +14,9 @@
                   />Home</a
                 >
               </li>
-              <li class="breadcrumb-item active">Settings</li>
+              <li class="breadcrumb-item active">Import Excel</li>
             </ul>
-            <h3>Settings</h3>
+            <h3>Import Excel</h3>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
@@ -27,13 +27,6 @@
                   <h2 class="card-titles">Import Excel</h2>
                 </div>
                 <div class="card-body">
-                  <!-- <div class="company-logo">
-                    <label class="logo-upload" for="edit_img">
-                      <input type="file" id="edit_img" />
-                      <a><i data-feather="edit"></i></a>
-                    </label>
-                    <img src="@/assets/img/logo2.png" alt="logo" />
-                  </div> -->
                   <div class="import-excel">
                     <div
                       class="import-excel__drop d-flex align-items-center justify-content-center"
@@ -52,10 +45,7 @@
                     </div>
                   </div>
                   <div class="form-btn">
-                    <a
-                      href="#"
-                      @click="onSubmitImportExcel"
-                      class="btn btn-apply"
+                    <a @click="onSubmitImportExcel" class="btn btn-apply"
                       >Upload Excel</a
                     >
                   </div>

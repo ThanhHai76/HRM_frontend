@@ -2235,6 +2235,7 @@ button.bg-danger:hover {
 .header .header-left .logo img {
 	max-height: 45px;
 	width: auto;
+	border-radius: 50%;
 }
 
 .header-left .logo.logo-small {
@@ -3158,7 +3159,6 @@ html.menu-opened body {
 }
 
 .top-nav-search form {
-	margin-top: 10px;
 	position: relative;
 	width: 100%;
 }
@@ -6238,9 +6238,9 @@ span.mandatory {
 .form-group select,
 .form-group input[type="text"] {
 	width: 100%;
-	height: 70px;
+	height: 50px;
 	border: 1px solid rgba(235, 236, 241, 1);
-	padding: 0 30px;
+	padding: 0 20px;
 	font-size: 15px;
 	color: #000000;
 	border-radius: 5px;
@@ -7525,13 +7525,13 @@ label.logo-upload {
 	}
 
 	.sidebar {
-		margin-left: -300px;
-		width: 300px;
+		/* margin-left: -300px; */
+		width: 70px;
 		-webkit-transition: all 0.4s ease;
 		-moz-transition: all 0.4s ease;
 		transition: all 0.4s ease;
 		z-index: 1041;
-		top: 0px;
+		/* top: 0px; */
 	}
 
 	.sidebar-input .top-nav-search {
@@ -7557,7 +7557,7 @@ label.logo-upload {
 
 	.page-wrapper {
 		margin-left: 0;
-		padding-left: 0;
+		padding-left: 70px;
 		padding-right: 0;
 		-webkit-transition: all 0.4s ease;
 		-moz-transition: all 0.4s ease;

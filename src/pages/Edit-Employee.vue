@@ -5,18 +5,16 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a @click="$router.push('/employee')">Employee</a></li>
-              <li class="breadcrumb-item active">Add Employees</li>
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item active">Edit Employees</li>
             </ul>
-            <h3>Add Employees</h3>
+            <h3>Edit Employees</h3>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-titles">
-                Basic Infomation
-              </h2>
+              <h2 class="card-titles">Basic Infomation</h2>
             </div>
             <div class="card-body">
               <div class="row">
@@ -145,9 +143,7 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-titles">
-                Employment Details
-              </h2>
+              <h2 class="card-titles">Employment Details</h2>
             </div>
             <div class="card-body">
               <div class="row">
@@ -265,9 +261,7 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-titles">
-                Salary/Offer Details
-              </h2>
+              <h2 class="card-titles">Salary/Offer Details</h2>
             </div>
             <div class="card-body">
               <div class="row">
@@ -356,9 +350,7 @@
           <div class="row">
             <div class="col-xl-12 col-sm-12 col-12">
               <div class="form-btn">
-                <a @click="onAddEmployee" class="btn btn-apply w-auto"
-                  >Add Employee</a
-                >
+                <a @click="onEditEmployee" class="btn btn-apply w-auto">Save</a>
                 <a @click="onCancel" class="btn btn-secondary">Cancel</a>
               </div>
             </div>
@@ -394,10 +386,10 @@
 </template>
 
 <script>
-import { createEmployee } from "@/services/employee-service";
+import { getEmployee, updateEmployee } from "@/services/employee-service";
 
 export default {
-  name: "AddEmployee",
+  name: "EditEmployee",
   data() {
     return {
       dataEmployee: {
@@ -438,21 +430,27 @@ export default {
       messageNoti: "",
     };
   },
+  mounted() {
+    this.getDataEmployee();
+  },
   methods: {
-    async onAddEmployee() {
-      const { status } = await createEmployee(this.dataEmployee);
+    async getDataEmployee() {
+      const { data } = await getEmployee(this.$route.params.id);
+      this.dataEmployee = { ...this.dataEmployee, ...data };
+    },
+    async onEditEmployee() {
+      const { status } = await updateEmployee(this.$route.params.id, this.dataEmployee);
       if (status === 200) {
         this.isShowModalSuccess = true;
-        this.messageNoti = "Add a employee successfully";
+        this.messageNoti = "Edit a employee successfully";
       }
     },
     onCancel() {
       this.isShowModalCancel = true;
       this.messageNoti = "Are you sure you want to cancel";
-    }
+    },
   },
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped></style>
