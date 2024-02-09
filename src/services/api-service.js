@@ -5,7 +5,7 @@ import jsesc from "jsesc";
 
 const HTTP = () => {
   const instance = axios.create({
-    baseURL: process.env.VUE_APP_BACKEND_URL,
+    baseURL: process.env.VUE_APP_BACKEND_URL_SERVER,
     withCredentials: false,
   });
   instance.interceptors.request.use(
