@@ -58,7 +58,10 @@
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
           <div class="card">
             <div class="table-heading">
-              <h2>{{ employeeFilter.length }} Employees CV</h2>
+              <h2 v-if="employeeFilter.length > 0" class="pr-2">
+                {{ employeeFilter.length }} Employees CV
+              </h2>
+              <b-spinner v-else variant="success" label="Spinning"></b-spinner>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered custom-table no-footer">
@@ -278,6 +281,11 @@ export default {
         this.validatePhoneNumber(this.searchWord) &&
         this.employeePerpage.length > 1
       );
+    },
+  },
+  watch: {
+    employeeFilter() {
+      this.currentPage = 1;
     },
   },
   async mounted() {

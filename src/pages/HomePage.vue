@@ -38,9 +38,16 @@
         <div class="col-xl-3 col-sm-6 col-12">
           <div class="card board1 fill1">
             <div class="card-body">
-              <div class="card_widget_header">
+              <div class="card_widget_header d-flex flex-column">
                 <label>Employees</label>
-                <h4>{{ allEmployees.length }}</h4>
+                <h4 v-if="allEmployees.length > 0">
+                  {{ allEmployees.length }}
+                </h4>
+                <b-spinner
+                  v-else
+                  variant="success"
+                  label="Spinning"
+                ></b-spinner>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash1.png" alt="card-img" />
@@ -51,9 +58,14 @@
         <div class="col-xl-3 col-sm-6 col-12">
           <div class="card board1 fill2">
             <div class="card-body">
-              <div class="card_widget_header">
+              <div class="card_widget_header d-flex flex-column">
                 <label>Jobs</label>
-                <h4>{{ allJobs.length }}</h4>
+                <h4 v-if="allJobs.length > 0">{{ allJobs.length }}</h4>
+                <b-spinner
+                  v-else
+                  variant="success"
+                  label="Spinning"
+                ></b-spinner>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash2.png" alt="card-img" />
@@ -64,9 +76,14 @@
         <div class="col-xl-3 col-sm-6 col-12">
           <div class="card board1 fill3">
             <div class="card-body">
-              <div class="card_widget_header">
+              <div class="card_widget_header d-flex flex-column">
                 <label>HR chấm Pass</label>
-                <h4>{{ hrMarkPass.length }}</h4>
+                <h4 v-if="hrMarkPass.length > 0">{{ hrMarkPass.length }}</h4>
+                <b-spinner
+                  v-else
+                  variant="success"
+                  label="Spinning"
+                ></b-spinner>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash3.png" alt="card-img" />
@@ -77,9 +94,16 @@
         <div class="col-xl-3 col-sm-6 col-12">
           <div class="card board1 fill4">
             <div class="card-body">
-              <div class="card_widget_header">
+              <div class="card_widget_header d-flex flex-column birth_year">
                 <label>Năm sinh</label>
-                <h4>{{ minBirth }} - {{ maxBirth }}</h4>
+                <h4 v-if="allEmployees.length > 0">
+                  {{ minBirth }} - {{ maxBirth }}
+                </h4>
+                <b-spinner
+                  v-else
+                  variant="success"
+                  label="Spinning"
+                ></b-spinner>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash4.png" alt="card-img" />
@@ -162,7 +186,7 @@ export default {
       hrMarkPass: [],
       birthYears: [],
       minBirth: 0,
-      maxBirth: 0
+      maxBirth: 0,
     };
   },
   async mounted() {
@@ -171,12 +195,16 @@ export default {
 
     this.allJobs = [...new Set(this.allEmployees.map((e) => e.job))];
 
-    const word = ("Pass").toUpperCase().trim();
-    this.hrMarkPass = this.allEmployees.filter(({hrMark}) => (hrMark || "").toUpperCase().includes(word));
+    const word = "Pass".toUpperCase().trim();
+    this.hrMarkPass = this.allEmployees.filter(({ hrMark }) =>
+      (hrMark || "").toUpperCase().includes(word)
+    );
 
-    this.birthYears = [...new Set(this.allEmployees.map((e) => Number(e.birthYear)))];
-    this.minBirth = Math.min(...this.birthYears.filter(e => e > 0));
-    this.maxBirth = Math.max(...this.birthYears.filter(e => e > 0));
+    this.birthYears = [
+      ...new Set(this.allEmployees.map((e) => Number(e.birthYear))),
+    ];
+    this.minBirth = Math.min(...this.birthYears.filter((e) => e > 0));
+    this.maxBirth = Math.max(...this.birthYears.filter((e) => e > 0));
   },
   methods: {
     convertTime(date) {
@@ -187,4 +215,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.birth_year h4 {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
+}
+</style>
