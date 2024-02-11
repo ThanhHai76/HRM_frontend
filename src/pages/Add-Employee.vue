@@ -440,6 +440,10 @@ export default {
   },
   methods: {
     async onAddEmployee() {
+      if (!this.dataEmployee.phone) {
+        alert("You should add information");
+        return;
+      }
       const { status } = await createEmployee(this.dataEmployee);
       if (status === 200) {
         this.isShowModalSuccess = true;

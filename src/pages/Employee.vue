@@ -6,7 +6,7 @@
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="/"
+                <a @click="$router.push('/')"
                   ><img
                     src="@/assets/img/dash.png"
                     class="mr-2"
@@ -16,7 +16,7 @@
               </li>
               <li class="breadcrumb-item active">Employees</li>
             </ul>
-            <h3>Employees</h3>
+            <h3>Employees CV</h3>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
@@ -58,7 +58,7 @@
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
           <div class="card">
             <div class="table-heading">
-              <h2>{{ employeeFilter.length }} Employees</h2>
+              <h2>{{ employeeFilter.length }} Employees CV</h2>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered custom-table no-footer">
@@ -204,7 +204,7 @@
         @ok="confirmDeleteEmployee"
       >
         <div>
-          <p>Confirm to delete this Employee</p>
+          <p>Confirm to delete this Employee CV</p>
         </div>
       </b-modal>
 
@@ -244,7 +244,16 @@ export default {
     employeeFilter() {
       const trimWord = this.searchWord.toUpperCase().trim();
       return this.allEmployees.filter(
-        ({ name, phone, email, job, birthYear, academicLevel, specialized, hrMark }) =>
+        ({
+          name,
+          phone,
+          email,
+          job,
+          birthYear,
+          academicLevel,
+          specialized,
+          hrMark,
+        }) =>
           (name || "").toUpperCase().includes(trimWord) ||
           (phone || "").toUpperCase().includes(trimWord) ||
           (email || "").toUpperCase().includes(trimWord) ||
@@ -322,6 +331,7 @@ export default {
   cursor: pointer;
 }
 .search_status {
+  min-width: 180px;
   border: 1px solid #1665d8;
   color: #1665d8;
   font-size: 12px;

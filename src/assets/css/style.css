@@ -6261,8 +6261,8 @@ span.mandatory {
 }
 
 .form-btn a.btn {
-	width: 210px;
-	padding: 19px 15px;
+	min-width: 120px !important;
+	padding: 10px 20px;
 	box-shadow: 0 4px 10px 0 rgb(137 137 137 / 25%);
 	border-radius: 10px;
 	font-size: 20px;

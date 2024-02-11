@@ -6,7 +6,7 @@
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="/"
+                <a @click="$router.push('/')"
                   ><img
                     src="@/assets/img/dash.png"
                     class="mr-2"
@@ -31,7 +31,7 @@
                     <div
                       class="import-excel__drop d-flex align-items-center justify-content-center"
                     >
-                      <h5 class="mb-4">Drag and drop to upload file</h5>
+                      <h5 class="mb-4">Choose File or Drag and drop to upload file</h5>
                       <input
                         type="file"
                         class="import-excel__drop__file form-control"

@@ -5,8 +5,8 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active">Edit Employees</li>
+              <li class="breadcrumb-item"><a @click="$router.push('/employee')">Employee</a></li>
+              <li class="breadcrumb-item active">Edit Employees CV</li>
             </ul>
             <h3>Edit Employees</h3>
           </div>
@@ -442,7 +442,7 @@ export default {
       const { status } = await updateEmployee(this.$route.params.id, this.dataEmployee);
       if (status === 200) {
         this.isShowModalSuccess = true;
-        this.messageNoti = "Edit a employee successfully";
+        this.messageNoti = "Update a employee CV successfully";
       }
     },
     onCancel() {
