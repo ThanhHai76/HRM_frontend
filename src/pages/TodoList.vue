@@ -85,9 +85,9 @@ export default {
   data() {
     return {
       todos: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [
-        { text: "Learn JavaScript ES6+ goodies", isDone: true },
-        { text: "Learn Vue", isDone: false },
-        { text: "Build something awesome", isDone: false },
+        { text: "Thanh Hải", isDone: true },
+        { text: "Yêu Hậu Linh", isDone: true },
+        { text: "Nhớ Em", isDone: true },
       ],
       editingTodo: null,
       newTodo: null,
