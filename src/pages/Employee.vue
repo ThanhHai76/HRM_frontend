@@ -156,7 +156,7 @@
                       }}</label>
                     </td>
                     <td>
-                      <label>{{ item.cvLinkPDF }} </label>
+                      <a :href="item.linkCV" target="_blank">Link</a>
                     </td>
                     <td>{{ item.linkSP }}</td>
                     <td>{{ item.linkFB }}</td>

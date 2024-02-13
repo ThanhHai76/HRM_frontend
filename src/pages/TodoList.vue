@@ -85,9 +85,9 @@ export default {
   data() {
     return {
       todos: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [
-        { text: "Thanh Hải", isDone: true },
-        { text: "Yêu Hậu Linh", isDone: true },
-        { text: "Nhớ Em", isDone: true },
+        { text: "Thanh Hải", isDone: false },
+        { text: "Yêu Hậu Linh", isDone: false },
+        { text: "Nhớ Em", isDone: false },
       ],
       editingTodo: null,
       newTodo: null,
