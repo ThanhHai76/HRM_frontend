@@ -3,13 +3,13 @@
     <div class="header-left">
       <a href="/" class="logo">
         <img
-          src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/363031646_3955990917964441_2379575484276654035_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeFHxN-A9yUkUckikXrUuw5VqiLeLmJs2U6qIt4uYmzZTpDbSggO8RHmMXJJh18af6srmEbHbKYKKZBtCcgvwuqb&_nc_ohc=8IwKd8985bIAX8rAMo3&_nc_ht=scontent.fhan3-3.fna&oh=00_AfDl3OYHcwE97fh1dZRBinqckX2FcGSgzQoPEsBtk77IgQ&oe=65C96CE3"
+          src="@/assets/img/SeaLinh.jpg"
           alt="Logo"
         />
       </a>
       <a href="/" class="logo logo-small">
         <img
-          src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/363031646_3955990917964441_2379575484276654035_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeFHxN-A9yUkUckikXrUuw5VqiLeLmJs2U6qIt4uYmzZTpDbSggO8RHmMXJJh18af6srmEbHbKYKKZBtCcgvwuqb&_nc_ohc=8IwKd8985bIAX8rAMo3&_nc_ht=scontent.fhan3-3.fna&oh=00_AfDl3OYHcwE97fh1dZRBinqckX2FcGSgzQoPEsBtk77IgQ&oe=65C96CE3"
+          src="@/assets/img/SeaLinh.jpg"
           alt="Logo"
           width="30"
           height="30"
@@ -159,7 +159,7 @@
         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
           <span class="user-img">
             <img
-              src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-6/363031646_3955990917964441_2379575484276654035_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeFHxN-A9yUkUckikXrUuw5VqiLeLmJs2U6qIt4uYmzZTpDbSggO8RHmMXJJh18af6srmEbHbKYKKZBtCcgvwuqb&_nc_ohc=8IwKd8985bIAX8rAMo3&_nc_ht=scontent.fhan3-3.fna&oh=00_AfDl3OYHcwE97fh1dZRBinqckX2FcGSgzQoPEsBtk77IgQ&oe=65C96CE3"
+              src="@/assets/img/SeaLinh.jpg"
               alt=""
             />
             <span class="status online"></span>
