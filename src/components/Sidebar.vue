@@ -10,10 +10,22 @@
                 <span>Dashboard</span>
               </router-link>
             </li>
-            <li title="Employees" :class="{ active: path === '/employee' }">
+            <li title="Employees CV" :class="{ active: path === '/employee' }">
               <router-link to="/employee">
                 <img src="@/assets/img/employee.svg" alt="sidebar_img" />
-                <span>Employees</span>
+                <span>Employees CV</span>
+              </router-link>
+            </li>
+            <li title="Import Employees CV" :class="{ active: path === '/import-excel-empoyee' }">
+              <router-link to="/import-excel-empoyee">
+                <img src="@/assets/img/manage.svg" alt="sidebar_img" />
+                <span>Import Excel</span>
+              </router-link>
+            </li>
+            <li title="Todo List" :class="{ active: path === '/todo-list' }">
+              <router-link to="/todo-list">
+                <img src="@/assets/img/report.svg" alt="sidebar_img" />
+                <span>Todo List</span>
               </router-link>
             </li>
             <li title="Calendar" :class="{ active: path === '/calendar' }">
@@ -22,12 +34,12 @@
                 <span>Calendar</span>
               </router-link>
             </li>
-            <li title="Leave" :class="{ active: path === '/leave' }">
+            <!-- <li title="Leave" :class="{ active: path === '/leave' }">
               <router-link to="/leave">
                 <img src="@/assets/img/leave.svg" alt="sidebar_img" />
                 <span>Leave</span>
               </router-link>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>

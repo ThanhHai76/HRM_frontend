@@ -22,13 +22,23 @@
       </div>
       <div class="row">
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
-          <VCalendar 
+          <VCalendar
+            ref="calendar"
             :initial-page="{ month: 2, year: 2024 }"
             :color="selectedColor"
             :attributes="attrs"
-          />
-
-          <!-- <ejs-schedule :selectedDate='selectedDate' :eventSettings='eventSettings'></ejs-schedule> -->
+          >
+            <template #footer>
+              <div class="w-full px-3 pb-3">
+                <button
+                  class="bg-pink hover:bg-pink font-bold w-full px-3 py-1 rounded-md"
+                  @click="moveToday"
+                >
+                  Today
+                </button>
+              </div>
+            </template>
+          </VCalendar>
         </div>
       </div>
     </div>
@@ -37,48 +47,42 @@
 
 <script>
 import { ref } from "vue";
-import { Day, Week, WorkWeek, Month, Agenda } from '@syncfusion/ej2-vue-schedule';
 export default {
   name: "CalendarPage",
-  data() {
-            return {
-                eventSettings: { dataSource: [{
-                    Id: 1,
-                    Subject: 'Meeting',
-                    StartTime: new Date(2023, 1, 15, 10, 0),
-                    EndTime: new Date(2023, 1, 15, 12, 30)
-                    }] },
-                selectedDate: new Date(2023, 1, 15)
-            }
-        },
-        provide: {
-            schedule: [Day, Week, WorkWeek, Month, Agenda]
-        },
   setup() {
+    const calendar = ref(null);
+    const moveToday = function () {
+      calendar.value.move(new Date());
+    };
     const selectedColor = ref("pink");
     const attrs = ref([
       {
         key: "test",
         highlight: true,
-        dates: { start: new Date(2024, 1, 8), end: new Date(2024, 1, 14) },
+        dates: new Date(),
       },
     ]);
 
     return {
       selectedColor,
       attrs,
+      calendar,
+      moveToday,
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '@syncfusion/ej2-base/styles/material.css';
-@import '@syncfusion/ej2-buttons/styles/material.css';
-@import '@syncfusion/ej2-calendars/styles/material.css';
-@import '@syncfusion/ej2-dropdowns/styles/material.css';
-@import '@syncfusion/ej2-inputs/styles/material.css';
-@import '@syncfusion/ej2-navigations/styles/material.css';
-@import '@syncfusion/ej2-popups/styles/material.css';
-@import '@syncfusion/ej2-vue-schedule/styles/material.css';
+.w-full {
+  width: 100%;
+}
+.bg-pink {
+  background-color: pink;
+  border: none;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
 </style>

@@ -15,14 +15,10 @@ import '@/assets/css/style.css';
 import BootstrapVue3 from 'bootstrap-vue-3';
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
 
-import { SchedulePlugin } from '@syncfusion/ej2-vue-schedule';
-
 const app = createApp(App);
 
 // Use plugin defaults (optional)
 app.use(setupCalendar, {})
-
-app.use(SchedulePlugin);
 
 // Use the components
 app.component('VCalendar', Calendar);

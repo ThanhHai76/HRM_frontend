@@ -5,7 +5,9 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a @click="$router.push('/employee')">Employee</a></li>
+              <li class="breadcrumb-item">
+                <a @click="$router.push('/employee')">Employee</a>
+              </li>
               <li class="breadcrumb-item active">Add Employees</li>
             </ul>
             <h3>Add Employees</h3>
@@ -14,9 +16,7 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-titles">
-                Basic Infomation
-              </h2>
+              <h2 class="card-titles">Basic Infomation</h2>
             </div>
             <div class="card-body">
               <div class="row">
@@ -145,9 +145,7 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-titles">
-                Employment Details
-              </h2>
+              <h2 class="card-titles">Employment Details</h2>
             </div>
             <div class="card-body">
               <div class="row">
@@ -265,9 +263,7 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-titles">
-                Salary/Offer Details
-              </h2>
+              <h2 class="card-titles">Salary/Offer Details</h2>
             </div>
             <div class="card-body">
               <div class="row">
@@ -356,9 +352,14 @@
           <div class="row">
             <div class="col-xl-12 col-sm-12 col-12">
               <div class="form-btn">
-                <a @click="onAddEmployee" class="btn btn-apply w-auto"
-                  >Add Employee</a
-                >
+                <a @click="onAddEmployee" class="btn btn-apply w-auto">
+                  <b-spinner
+                    v-if="isAdding"
+                    variant="success"
+                    label="Spinning"
+                  ></b-spinner>
+                  <span v-else>Add Employee</span>
+                </a>
                 <a @click="onCancel" class="btn btn-secondary">Cancel</a>
               </div>
             </div>
@@ -436,6 +437,7 @@ export default {
       isShowModalCancel: false,
       isShowModalSuccess: false,
       messageNoti: "",
+      isAdding: false,
     };
   },
   methods: {
@@ -444,19 +446,20 @@ export default {
         alert("You should add information");
         return;
       }
+      this.isAdding = true;
       const { status } = await createEmployee(this.dataEmployee);
       if (status === 200) {
         this.isShowModalSuccess = true;
         this.messageNoti = "Add a employee successfully";
       }
+      this.isAdding = false;
     },
     onCancel() {
       this.isShowModalCancel = true;
       this.messageNoti = "Are you sure you want to cancel";
-    }
+    },
   },
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

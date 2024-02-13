@@ -7,6 +7,7 @@ import ErrorPage from "@/pages/Error.vue";
 import AddEmployeePage from "@/pages/Add-Employee.vue";
 import EditEmployeePage from "@/pages/Edit-Employee.vue"
 import ImportExcelEmployee from "@/pages/Import-Excel.vue";
+import TodoListPage from "@/pages/TodoList.vue";
 
 const routes = [
   {
@@ -49,6 +50,16 @@ const routes = [
     name: "ImportExcelEmployee",
     component: ImportExcelEmployee,
   },
+  {
+    path: "/todo-list",
+    name: "TodoListPage",
+    component: TodoListPage,
+  },
+  {
+    path: "/todo-list/:status",
+    name: "TodoListStatusPage",
+    component: TodoListPage
+  }
 ];
 
 const router = createRouter({

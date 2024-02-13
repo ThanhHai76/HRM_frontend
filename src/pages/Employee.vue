@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
-          <div class="head-link-set">
+          <div class="head-link-set flex-wrap">
             <div class="top-nav-search d-flex align-items-center">
               <form>
                 <input
@@ -37,17 +37,17 @@
                 Đã từng tham gia phỏng vấn
               </div>
             </div>
-            <div class="d-flex">
+            <div class="d-flex btn-employee">
               <button
                 type="button"
-                class="btn btn-outline-success btn-lg mr-4"
+                class="btn btn-outline-success btn-lg mr-4 btn-action-employee"
                 @click="addEmployee"
               >
-                Add Employee
+                Add Employee CV
               </button>
               <button
                 type="button"
-                class="btn btn-outline-secondary btn-lg"
+                class="btn btn-outline-secondary btn-lg btn-action-employee"
                 @click="importExcel"
               >
                 Import Excel
@@ -346,5 +346,14 @@ export default {
   padding: 10px;
   border-radius: 20px;
   margin-left: 20px;
+}
+.head-link-set {
+  gap: 24px;
+}
+
+@media (max-width: 991.98px) {
+  .btn-employee {
+    padding-left: 20px;
+  }
 }
 </style>

@@ -350,7 +350,14 @@
           <div class="row">
             <div class="col-xl-12 col-sm-12 col-12">
               <div class="form-btn">
-                <a @click="onEditEmployee" class="btn btn-apply w-auto">Save</a>
+                <a @click="onEditEmployee" class="btn btn-apply w-auto">
+                  <b-spinner
+                    v-if="isEditing"
+                    variant="success"
+                    label="Spinning"
+                  ></b-spinner>
+                  <span v-else>Save</span>
+                </a>
                 <a @click="onCancel" class="btn btn-secondary">Cancel</a>
               </div>
             </div>
@@ -428,6 +435,7 @@ export default {
       isShowModalCancel: false,
       isShowModalSuccess: false,
       messageNoti: "",
+      isEditing: false,
     };
   },
   mounted() {
@@ -439,11 +447,13 @@ export default {
       this.dataEmployee = { ...this.dataEmployee, ...data };
     },
     async onEditEmployee() {
+      this.isEditing = true;
       const { status } = await updateEmployee(this.$route.params.id, this.dataEmployee);
       if (status === 200) {
         this.isShowModalSuccess = true;
         this.messageNoti = "Update a employee CV successfully";
       }
+      this.isEditing = false;
     },
     onCancel() {
       this.isShowModalCancel = true;

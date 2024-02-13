@@ -7640,6 +7640,9 @@ label.logo-upload {
 	.breadcrumb-path {
 		margin-bottom: 20px;
 	}
+	.top-nav-search {
+		width: 100%;
+	}
 }
 
 @media (max-width: 767.98px) {
@@ -7919,7 +7922,7 @@ label.logo-upload {
 	}
 
 	.head-link-set {
-		display: inline-block;
+		/* display: inline-block; */
 		align-items: center;
 		justify-content: normal;
 		width: 100%;

@@ -31,7 +31,9 @@
                     <div
                       class="import-excel__drop d-flex align-items-center justify-content-center"
                     >
-                      <h5 class="mb-4">Choose File or Drag and drop to upload file</h5>
+                      <h5 class="mb-4">
+                        Choose File or Drag and drop to upload file
+                      </h5>
                       <input
                         type="file"
                         class="import-excel__drop__file form-control"
@@ -45,8 +47,13 @@
                     </div>
                   </div>
                   <div class="form-btn">
-                    <a @click="onSubmitImportExcel" class="btn btn-apply"
-                      >Upload Excel</a
+                    <a @click="onSubmitImportExcel" class="btn btn-apply">
+                      <b-spinner
+                        v-if="loadingUpload"
+                        variant="success"
+                        label="Spinning"
+                      ></b-spinner>
+                      Upload Excel</a
                     >
                   </div>
                 </div>
@@ -81,6 +88,7 @@ export default {
       fileImported: null,
       uploadSucessMessage: "",
       isShowModalSuccess: false,
+      loadingUpload: false,
     };
   },
   methods: {
@@ -106,11 +114,13 @@ export default {
     },
     async onSubmitImportExcel() {
       if (this.fileImported) {
+        this.loadingUpload = true;
         const { status } = await uploadExcelEmployee(this.fileImported);
         if (status === 201) {
           this.isShowModalSuccess = true;
           this.uploadSucessMessage = "Thank You! ✔ File Succesfully Uploaded.";
         }
+        this.loadingUpload = false;
       }
     },
   },
