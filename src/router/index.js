@@ -5,7 +5,8 @@ import CalendarPage from "@/pages/Calendar.vue";
 import LeavePage from "@/pages/Leave.vue";
 import ErrorPage from "@/pages/Error.vue";
 import AddEmployeePage from "@/pages/Add-Employee.vue";
-import EditEmployeePage from "@/pages/Edit-Employee.vue"
+import EditEmployeePage from "@/pages/Edit-Employee.vue";
+import DetailEmployeePage from "@/pages/Detail-Employee.vue";
 import ImportExcelEmployee from "@/pages/Import-Excel.vue";
 import TodoListPage from "@/pages/TodoList.vue";
 
@@ -44,6 +45,11 @@ const routes = [
     path: "/edit-employee/:id",
     name: "EditEmployee",
     component: EditEmployeePage,
+  },
+  {
+    path: "/detail-employee/:id",
+    name: "DetailEmployee",
+    component: DetailEmployeePage,
   },
   {
     path: "/import-excel-empoyee",

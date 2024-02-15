@@ -78,12 +78,12 @@
                     <th>Chuyên ngành</th>
                     <th>SĐT</th>
                     <th>Địa chỉ mail</th>
-                    <th>Link CV</th>
+                    <th>HR suggest</th>
+                    <th>HR chấm</th>
+                    <!-- <th>Link CV</th>
                     <th>Link SP</th>
                     <th>Link FB</th>
                     <th>Đơn vị UV từng làm</th>
-                    <th>HR suggest</th>
-                    <th>HR chấm</th>
                     <th>Bộ phận chấm</th>
                     <th>Vòng 1</th>
                     <th>Tham gia Vòng 1</th>
@@ -100,7 +100,7 @@
                     <th>THỬ VIỆC Thời gian</th>
                     <th>Kết quả thử việc</th>
                     <th>Note</th>
-                    <td>Ngày tạo</td>
+                    <td>Ngày tạo</td> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -117,6 +117,13 @@
                           Options
                         </button>
                         <ul class="dropdown-menu">
+                          <li>
+                            <a
+                              class="dropdown-item"
+                              @click="onDetailEmployee(item)"
+                              >Details</a
+                            >
+                          </li>
                           <li>
                             <a
                               class="dropdown-item"
@@ -155,14 +162,14 @@
                         item.email
                       }}</label>
                     </td>
-                    <td>
-                      <a :href="item.linkCV" target="_blank">Link</a>
-                    </td>
-                    <td>{{ item.linkSP }}</td>
-                    <td>{{ item.linkFB }}</td>
-                    <td>{{ item.companyUV }}</td>
                     <td>{{ item.hrSuggest }}</td>
                     <td>{{ item.hrMark }}</td>
+                    <!-- <td>
+                      <a :href="item.linkCV" target="_blank">Link</a>
+                    </td>
+                    <td><a v-if="item.linkSP" :href="item.linkSP" target="_blank">Link</a></td>
+                    <td><a v-if="item.linkFB" :href="item.linkFB" target="_blank">Link</a></td>
+                    <td>{{ item.companyUV }}</td>
                     <td>{{ item.partMark }}</td>
                     <td>{{ item.round1 }}</td>
                     <td>{{ item.joinRound1 }}</td>
@@ -181,7 +188,7 @@
                     <td>{{ item.notes3 }}</td>
                     <td>
                       <label>{{ convertTime(item.createdAt) }}</label>
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>
@@ -311,6 +318,9 @@ export default {
     },
     onEditEmployee(employee) {
       this.$router.push(`/Edit-Employee/${employee._id}`);
+    },
+    onDetailEmployee(employee) {
+      this.$router.push(`/Detail-Employee/${employee._id}`);
     },
     onDeleteEmployee(item) {
       this.isShowModalDelete = true;

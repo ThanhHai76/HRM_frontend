@@ -21,7 +21,7 @@
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="row justify-content-center">
-            <div class="col-xl-8 col-sm-8 col-8">
+            <div class="col-xl-8 col-sm-12 col-12">
               <div class="card">
                 <div class="card-header">
                   <h2 class="card-titles">Import Excel</h2>

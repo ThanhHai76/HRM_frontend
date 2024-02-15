@@ -46,12 +46,16 @@
         <!-- Remove this if you don't implement routing -->
         <ul class="filters">
           <li>
-            <router-link to="/todo-list/all" :class="{ selected: status === 'all' }"
+            <router-link
+              to="/todo-list/all"
+              :class="{ selected: status === 'all' }"
               >All</router-link
             >
           </li>
           <li>
-            <router-link to="/todo-list/active" :class="{ selected: status === 'active' }"
+            <router-link
+              to="/todo-list/active"
+              :class="{ selected: status === 'active' }"
               >Active</router-link
             >
           </li>
@@ -158,22 +162,31 @@ export default {
 
 <style scoped>
 .container_todoapp {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding-left: 240px;
-    padding-top: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-left: 240px;
+  padding-top: 70px;
 }
 .todoapp {
-    width: 50%;
+  width: 50%;
 }
 .header {
   z-index: 1;
   position: relative;
 }
 .view {
-    display: flex;
-    padding-left: 20px;
+  display: flex;
+  padding-left: 20px;
+}
+
+@media (max-width: 991.98px) {
+  .container_todoapp {
+    padding-left: 100px;
+  }
+  .todoapp {
+    width: 100%;
+  }
 }
 </style>
