@@ -233,7 +233,10 @@
 </template>
 
 <script>
-import { deleteEmployee, getALLEmployees } from "@/services/employee-service";
+import {
+  deleteEmployee,
+  getALLEmployees,
+} from "@/services/employee-service";
 import moment from "moment";
 
 export default {
@@ -296,7 +299,7 @@ export default {
     },
   },
   async mounted() {
-    this.fetchAllEmployees();
+    await this.fetchAllEmployees();
   },
   methods: {
     convertTime(date) {
@@ -314,7 +317,7 @@ export default {
     },
     async fetchAllEmployees() {
       const { data } = await getALLEmployees();
-      this.allEmployees = data;
+      this.allEmployees = data.filter((employee) => employee.source);
     },
     onEditEmployee(employee) {
       this.$router.push(`/Edit-Employee/${employee._id}`);
