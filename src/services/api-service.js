@@ -11,7 +11,7 @@ const HTTP = () => {
   instance.interceptors.request.use(
     (config) => {
       config.headers = {
-        "X-AUTH-TOKEN": "token",
+        "X-AUTH-TOKEN": localStorage.getItem("token"),
       };
       return config;
     },
@@ -25,7 +25,7 @@ const HTTP = () => {
       return response;
     },
     (error) => {
-      if ([401, 403, 500].includes(error.response.status)) {
+      if ([401, 403, 422, 500].includes(error.response.status)) {
         router.push(
           {
             name: "Error",

@@ -22,10 +22,16 @@
                 <span>Import Excel</span>
               </router-link>
             </li>
-            <li title="Todo List" :class="{ active: path === '/todo-list' }">
-              <router-link to="/todo-list">
+            <li title="Report" :class="{ active: path === '/report' }">
+              <router-link to="/report">
                 <img src="@/assets/img/report.svg" alt="sidebar_img" />
-                <span>Todo List</span>
+                <span>Reports</span>
+              </router-link>
+            </li>
+            <li title="List Order Job" :class="{ active: path === '/list-order-job' }">
+              <router-link to="/list-order-job">
+                <img src="@/assets/img/company.svg" alt="sidebar_img" />
+                <span>List Order Job</span>
               </router-link>
             </li>
             <li title="Calendar" :class="{ active: path === '/calendar' }">
@@ -34,6 +40,13 @@
                 <span>Calendar</span>
               </router-link>
             </li>
+            <li title="Todo List" :class="{ active: path === '/todo-list' }">
+              <router-link to="/todo-list">
+                <img src="@/assets/img/report.svg" alt="sidebar_img" />
+                <span>Todo List</span>
+              </router-link>
+            </li>
+            
             <!-- <li title="Leave" :class="{ active: path === '/leave' }">
               <router-link to="/leave">
                 <img src="@/assets/img/leave.svg" alt="sidebar_img" />

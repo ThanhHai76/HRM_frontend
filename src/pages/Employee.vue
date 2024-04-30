@@ -40,14 +40,14 @@
             <div class="d-flex btn-employee">
               <button
                 type="button"
-                class="btn btn-outline-success btn-lg mr-4 btn-action-employee"
+                class="btn btn-outline-success btn-lg mr-4"
                 @click="addEmployee"
               >
                 Add Employee CV
               </button>
               <button
                 type="button"
-                class="btn btn-outline-secondary btn-lg btn-action-employee"
+                class="btn btn-outline-secondary btn-lg"
                 @click="importExcel"
               >
                 Import Excel
@@ -57,11 +57,85 @@
         </div>
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
           <div class="card">
-            <div class="table-heading">
-              <h2 v-if="employeeFilter.length > 0" class="pr-2">
-                {{ employeeFilter.length }} Employees CV
-              </h2>
-              <b-spinner v-else variant="success" label="Spinning"></b-spinner>
+            <div class="table-heading d-flex">
+              <div class="button mr-5">
+                <b-dropdown
+                  id="dropdown-1"
+                  :text="yearFilter"
+                  variant="outline"
+                  class="m-md-2"
+                >
+                  <b-dropdown-item
+                    :active="yearFilter === 'Tất cả'"
+                    @click="changeYear('Tất cả')"
+                    >Tất cả</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="yearFilter === '2021'"
+                    @click="changeYear('2021')"
+                    >Năm 2021</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="yearFilter === '2022'"
+                    @click="changeYear('2022')"
+                    >Năm 2022</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="yearFilter === '2023'"
+                    @click="changeYear('2023')"
+                    >Năm 2023</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="yearFilter === '2024'"
+                    @click="changeYear('2024')"
+                    >Năm 2024</b-dropdown-item
+                  >
+                </b-dropdown>
+              </div>
+              <div class="d-flex align-items-center mr-5">
+                <h2 v-if="employeeFilter.length > 0" class="pr-2">
+                  {{ employeeFilter.length }} Employees CV
+                </h2>
+                <b-spinner
+                  v-if="isLoading && employeeFilter.length == 0"
+                  variant="success"
+                  label="Spinning"
+                ></b-spinner>
+              </div>
+              <div class="button">
+                <b-dropdown
+                  id="dropdown-2"
+                  :text="`Mỗi trang ${perPage}`"
+                  variant="outline"
+                  class="m-md-2"
+                >
+                  <b-dropdown-item
+                    :active="perPage === 5"
+                    @click="changePerPage(5)"
+                    >5</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="perPage === 10"
+                    @click="changePerPage(10)"
+                    >10</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="perPage === 20"
+                    @click="changePerPage(20)"
+                    >20</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="perPage === 50"
+                    @click="changePerPage(50)"
+                    >50</b-dropdown-item
+                  >
+                  <b-dropdown-item
+                    :active="perPage === 100"
+                    @click="changePerPage(100)"
+                    >100</b-dropdown-item
+                  >
+                </b-dropdown>
+              </div>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered custom-table no-footer">
@@ -80,11 +154,11 @@
                     <th>Địa chỉ mail</th>
                     <th>HR suggest</th>
                     <th>HR chấm</th>
+                    <th>Bộ phận chấm</th>
                     <!-- <th>Link CV</th>
                     <th>Link SP</th>
                     <th>Link FB</th>
                     <th>Đơn vị UV từng làm</th>
-                    <th>Bộ phận chấm</th>
                     <th>Vòng 1</th>
                     <th>Tham gia Vòng 1</th>
                     <th>Kết quả PV V1</th>
@@ -103,7 +177,10 @@
                     <td>Ngày tạo</td> -->
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="employeePerpage.length === 0">
+                  <tr><td colspan="12">Không có kết quả</td></tr>
+                </tbody>
+                <tbody v-else>
                   <tr v-for="(item, index) of employeePerpage" :key="item._id">
                     <td>{{ (this.currentPage - 1) * perPage + index + 1 }}</td>
                     <td class="tab-select">
@@ -164,13 +241,13 @@
                     </td>
                     <td>{{ item.hrSuggest }}</td>
                     <td>{{ item.hrMark }}</td>
+                    <td>{{ item.partMark }}</td>
                     <!-- <td>
                       <a :href="item.linkCV" target="_blank">Link</a>
                     </td>
                     <td><a v-if="item.linkSP" :href="item.linkSP" target="_blank">Link</a></td>
                     <td><a v-if="item.linkFB" :href="item.linkFB" target="_blank">Link</a></td>
                     <td>{{ item.companyUV }}</td>
-                    <td>{{ item.partMark }}</td>
                     <td>{{ item.round1 }}</td>
                     <td>{{ item.joinRound1 }}</td>
                     <td>{{ item.interviewV1 }}</td>
@@ -233,10 +310,7 @@
 </template>
 
 <script>
-import {
-  deleteEmployee,
-  getALLEmployees,
-} from "@/services/employee-service";
+import { deleteEmployee, getALLEmployees } from "@/services/employee-service";
 import moment from "moment";
 
 export default {
@@ -251,17 +325,21 @@ export default {
       isShowModalDelete: false,
       isShowModalSuccess: false,
       messageNoti: "",
+      yearFilter: "Tất cả",
+      isLoading: false,
     };
   },
   computed: {
     employeeFilter() {
       const trimWord = this.searchWord.toUpperCase().trim();
-      return this.allEmployees.filter(
+      return this.employeeYearFilter.filter(
         ({
           name,
           phone,
           email,
+          source,
           job,
+          cvDate,
           birthYear,
           academicLevel,
           specialized,
@@ -270,12 +348,18 @@ export default {
           (name || "").toUpperCase().includes(trimWord) ||
           (phone || "").toUpperCase().includes(trimWord) ||
           (email || "").toUpperCase().includes(trimWord) ||
+          (source || "").toUpperCase().includes(trimWord) ||
           (job || "").toUpperCase().includes(trimWord) ||
+          (cvDate || "").toUpperCase().includes(trimWord) ||
           (birthYear || "").toUpperCase().includes(trimWord) ||
           (academicLevel || "").toUpperCase().includes(trimWord) ||
           (specialized || "").toUpperCase().includes(trimWord) ||
           (hrMark || "").toUpperCase().includes(trimWord)
       );
+    },
+    employeeYearFilter() {
+      if (this.yearFilter === 'Tất cả') return this.allEmployees;
+      return this.allEmployees.filter(({ cvDate }) => (cvDate || "").includes(`/${this.yearFilter}`));
     },
     employeePerpage() {
       return this.employeeFilter.filter((employee, index) => {
@@ -316,8 +400,10 @@ export default {
       this.$router.push("/import-excel-empoyee");
     },
     async fetchAllEmployees() {
+      this.isLoading = true;
       const { data } = await getALLEmployees();
-      this.allEmployees = data.filter((employee) => employee.source);
+      this.allEmployees = data.filter((employee) => employee.phone);
+      this.isLoading = false;
     },
     onEditEmployee(employee) {
       this.$router.push(`/Edit-Employee/${employee._id}`);
@@ -343,6 +429,12 @@ export default {
         alert("Copied");
       });
     },
+    changeYear(year) {
+      this.yearFilter = year;
+    },
+    changePerPage(perPage) {
+      this.perPage = perPage;
+    }
   },
 };
 </script>
@@ -362,6 +454,11 @@ export default {
 }
 .head-link-set {
   gap: 24px;
+}
+
+.table-heading .button {
+  left: 10px;
+  top: 10px;
 }
 
 @media (max-width: 991.98px) {

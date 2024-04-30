@@ -24,7 +24,7 @@
             <div class="col-xl-8 col-sm-12 col-12">
               <div class="card">
                 <div class="card-header">
-                  <h2 class="card-titles">Import Excel</h2>
+                  <h2 class="card-titles">Import Excel to Employee CV</h2>
                 </div>
                 <div class="card-body">
                   <div class="import-excel">

@@ -4169,7 +4169,7 @@ table.table-inbox tbody tr.checked {
 	height: 100%;
 	display: table-cell;
 	vertical-align: middle;
-	padding-top: 1.875rem;
+	/* padding-top: 1.875rem; */
 }
 
 .login-wrapper .loginbox {
@@ -6479,7 +6479,7 @@ label.employee_count {
 }
 
 .table-heading {
-	padding: 25px;
+	padding: 15px;
 }
 
 .table-heading h2 {

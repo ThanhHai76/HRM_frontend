@@ -2,18 +2,10 @@
   <div class="header">
     <div class="header-left">
       <a href="/" class="logo">
-        <img
-          src="@/assets/img/SeaLinh.jpg"
-          alt="Logo"
-        />
+        <img src="@/assets/img/SeaLinh.jpg" alt="Logo" />
       </a>
       <a href="/" class="logo logo-small">
-        <img
-          src="@/assets/img/SeaLinh.jpg"
-          alt="Logo"
-          width="30"
-          height="30"
-        />
+        <img src="@/assets/img/SeaLinh.jpg" alt="Logo" width="30" height="30" />
       </a>
       <a id="toggle_btn" v-b-toggle.sidebar-1>
         <span class="bar-icon">
@@ -25,7 +17,7 @@
     </div>
 
     <ul class="nav user-menu">
-      <li class="nav-item dropdown">
+      <!-- <li class="nav-item dropdown">
         <a
           href="#"
           class="dropdown-toggle nav-link pr-0"
@@ -153,31 +145,31 @@
             <a href="activities.html">View all Notifications</a>
           </div>
         </div>
-      </li>
+      </li> -->
 
       <li class="nav-item dropdown has-arrow main-drop">
-        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown">
           <span class="user-img">
-            <img
-              src="@/assets/img/SeaLinh.jpg"
-              alt=""
-            />
+            <img src="@/assets/img/SeaLinh.jpg" alt="" />
             <span class="status online"></span>
           </span>
-          <span class="ml-2">Hậu Linh</span>
         </a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="profile.html"
-            ><i data-feather="user" class="mr-1"></i> Profile</a
-          >
-          <a class="dropdown-item" href="settings.html"
-            ><i data-feather="settings" class="mr-1"></i> Settings</a
-          >
-          <a class="dropdown-item" href="login.html"
-            ><i data-feather="log-out" class="mr-1"></i> Logout</a
-          >
-        </div>
       </li>
+      <div class="dropdown d-flex align-items-center">
+        <button
+          class="btn dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Hậu Linh
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" @click="logout">Logout</a>
+          </li>
+        </ul>
+      </div>
     </ul>
     <div class="dropdown mobile-user-menu show">
       <a
@@ -197,12 +189,20 @@
 </template>
 
 <script>
+import { resetAuthData } from "@/services/auth-service";
 export default {
   name: "HeaderComponent",
   setup() {
     return {};
   },
+  methods: {
+    async logout() {
+      await resetAuthData();
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>
