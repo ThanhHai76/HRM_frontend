@@ -191,7 +191,7 @@ export default {
   },
   async mounted() {
     const { data } = await getALLEmployees();
-    this.allEmployees = data.filter((employee) => employee.phone);
+    this.allEmployees = data;
 
     this.allJobs = [...new Set(this.allEmployees.map((e) => e.job))];
 

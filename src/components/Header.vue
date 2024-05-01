@@ -162,7 +162,7 @@
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          Hậu Linh
+          {{ getUserName }}
         </button>
         <ul class="dropdown-menu">
           <li>
@@ -194,6 +194,11 @@ export default {
   name: "HeaderComponent",
   setup() {
     return {};
+  },
+  computed: {
+    getUserName() {
+      return JSON.parse(localStorage.getItem("userData"))?.userName;
+    }
   },
   methods: {
     async logout() {

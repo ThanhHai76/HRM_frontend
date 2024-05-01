@@ -29,7 +29,10 @@
                       class="form-control pass-input"
                       v-model="dataLogin.password"
                     />
-                    <span class="fas fa-eye toggle-password" @click="showPassword"></span>
+                    <span
+                      class="fas fa-eye toggle-password"
+                      @click="showPassword"
+                    ></span>
                   </div>
                 </div>
                 <div class="text-bg-danger mb-2" v-if="message">
@@ -99,14 +102,15 @@ export default {
         password: "",
       },
       type: "password",
-      message: null
+      message: null,
     };
   },
   methods: {
     async onSubmit() {
       const { data, status } = await login(this.dataLogin);
       if (status === 200) {
-        await setAuthData(data, this.dataLogin);
+        const userData = { ...this.dataLogin, userName: data.name };
+        await setAuthData(data.token, userData);
         this.$router.push("/");
       } else {
         this.$router.push("/login");
@@ -115,7 +119,7 @@ export default {
     },
     showPassword() {
       this.type = this.type === "password" ? "text" : "password";
-    }
+    },
   },
   setup() {
     return {};
@@ -124,7 +128,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .form-group input[type="text"] {
-//   height: initial;
-// }
 </style>
