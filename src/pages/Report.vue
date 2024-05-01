@@ -22,7 +22,13 @@
       </div>
       <div class="row">
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
-          <div class="d-flex justify-content-between align-items-center">
+          <div v-if="isLoading">
+            <b-spinner
+              variant="success"
+              label="Spinning"
+            ></b-spinner>
+          </div>
+          <div v-else class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
               <div class="button">
                 <b-dropdown
@@ -406,6 +412,7 @@ export default {
       typeQuarter: "Quý 1",
       typeMonth: "Tháng 01",
       dataListJobs: [],
+      isLoading: false,
     };
   },
   computed: {
@@ -466,7 +473,7 @@ export default {
             ).length,
             HH: this.dataReportFilter.filter(
               (cvItem) => cvItem.job === item.job && cvItem.source === "HH"
-            ).length
+            ).length,
           },
           recruitFees: 0,
           recruitFeesCandidate: 0,
@@ -527,8 +534,10 @@ export default {
     },
   },
   async mounted() {
+    this.isLoading = true;
     await this.fetchDataReport();
     await this.fetchDataListJobs();
+    this.isLoading = false;
   },
   methods: {
     async fetchDataReport() {

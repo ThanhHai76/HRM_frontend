@@ -102,7 +102,7 @@
                   label="Spinning"
                 ></b-spinner>
               </div>
-              <div class="button">
+              <div v-if="employeeFilter.length > 0" class="button">
                 <b-dropdown
                   id="dropdown-2"
                   :text="`Mỗi trang ${perPage}`"
@@ -402,7 +402,7 @@ export default {
     async fetchAllEmployees() {
       this.isLoading = true;
       const { data } = await getALLEmployees();
-      this.allEmployees = data.filter((employee) => employee.phone);
+      this.allEmployees = data;
       this.isLoading = false;
     },
     onEditEmployee(employee) {
