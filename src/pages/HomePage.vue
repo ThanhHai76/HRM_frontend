@@ -26,10 +26,12 @@
         <div class="col-xl-6 col-sm-12 col-12">
           <div class="row">
             <div class="col-xl-6 col-sm-6 col-12">
-              <a class="btn-dash" href="#"> Admin Dashboard</a>
+              <a class="btn-dash" @click="$router.push('/employee')">
+                Employee CV
+              </a>
             </div>
             <div class="col-xl-6 col-sm-6 col-12">
-              <a class="btn-emp" @click="$router.push('/employee')">Employee</a>
+              <a class="btn-emp" @click="$router.push('/report')">Reports</a>
             </div>
           </div>
         </div>
@@ -117,12 +119,14 @@
           <div class="card flex-fill">
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Total Employees</h5>
+                <h5 class="card-title">Employees CV By Year</h5>
               </div>
             </div>
             <div class="card-body">
-              <div id="invoice_chart"></div>
-              <div class="text-center text-muted">
+              <div>
+                <canvas id="employeee_chart"></canvas>
+              </div>
+              <!-- <div class="text-center text-muted">
                 <div class="row">
                   <div class="col-4">
                     <div class="mt-4">
@@ -149,7 +153,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -157,11 +161,11 @@
           <div class="card flex-fill">
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Total Salary By Unit</h5>
+                <h5 class="card-title">Total CV In 2024</h5>
               </div>
             </div>
             <div class="card-body">
-              <div id="sales_chart"></div>
+              <canvas id="cv_year_chart"></canvas>
             </div>
           </div>
         </div>
@@ -173,6 +177,7 @@
 <script>
 import { getALLEmployees } from "@/services/employee-service";
 import moment from "moment";
+import Chart from "chart.js/auto";
 
 export default {
   name: "HomePage",
@@ -187,29 +192,137 @@ export default {
       birthYears: [],
       minBirth: 0,
       maxBirth: 0,
+      dataChart: [
+        { year: 2010, count: 10 },
+        { year: 2011, count: 20 },
+        { year: 2012, count: 15 },
+        { year: 2013, count: 25 },
+        { year: 2014, count: 22 },
+        { year: 2015, count: 30 },
+        { year: 2016, count: 28 },
+      ],
     };
   },
   async mounted() {
     const { data } = await getALLEmployees();
     this.allEmployees = data;
-
-    this.allJobs = [...new Set(this.allEmployees.map((e) => e.job))];
-
-    const word = "Pass".toUpperCase().trim();
-    this.hrMarkPass = this.allEmployees.filter(({ hrMark }) =>
-      (hrMark || "").toUpperCase().includes(word)
-    );
-
-    this.birthYears = [
-      ...new Set(this.allEmployees.map((e) => Number(e.birthYear))),
-    ];
-    this.minBirth = Math.min(...this.birthYears.filter((e) => e > 0));
-    this.maxBirth = Math.max(...this.birthYears.filter((e) => e > 0));
+    await this.analysisData();
+    this.chartEmployeesCV();
+    this.chartYear();
+  },
+  computed: {
+    employeesCVByYear() {
+      return [
+        {
+          year: "Năm 2021",
+          count: this.allEmployees.filter(({ cvDate }) =>
+            (cvDate || "").includes("/2021")
+          ).length,
+        },
+        {
+          year: "Năm 2022",
+          count: this.allEmployees.filter(({ cvDate }) =>
+            (cvDate || "").includes("/2022")
+          ).length,
+        },
+        {
+          year: "Năm 2023",
+          count: this.allEmployees.filter(({ cvDate }) =>
+            (cvDate || "").includes("/2023")
+          ).length,
+        },
+        {
+          year: "Năm 2024",
+          count: this.allEmployees.filter(({ cvDate }) =>
+            (cvDate || "").includes("/2024")
+          ).length,
+        },
+      ];
+    },
+    cvCurrentYear() {
+      const data = this.allEmployees.filter(({ cvDate }) =>
+        (cvDate || "").includes("/2024")
+      );
+      return [
+        {
+          month: "Tháng 01",
+          count: data.filter(({ cvDate }) =>
+            (cvDate || "").includes("/01/2024")
+          ).length,
+        },
+        {
+          month: "Tháng 02",
+          count: data.filter(({ cvDate }) =>
+            (cvDate || "").includes("/02/2024")
+          ).length,
+        },
+        {
+          month: "Tháng 03",
+          count: data.filter(({ cvDate }) =>
+            (cvDate || "").includes("/03/2024")
+          ).length,
+        },
+        {
+          month: "Tháng 04",
+          count: data.filter(({ cvDate }) =>
+            (cvDate || "").includes("/04/2024")
+          ).length,
+        },
+        {
+          month: "Tháng 05",
+          count: data.filter(({ cvDate }) =>
+            (cvDate || "").includes("/05/2024")
+          ).length,
+        },
+      ];
+    },
   },
   methods: {
+    async analysisData() {
+      this.allJobs = [...new Set(this.allEmployees.map((e) => e.job))];
+
+      const word = "Pass".toUpperCase().trim();
+      this.hrMarkPass = this.allEmployees.filter(({ hrMark }) =>
+        (hrMark || "").toUpperCase().includes(word)
+      );
+
+      this.birthYears = [
+        ...new Set(this.allEmployees.map((e) => Number(e.birthYear))),
+      ];
+      this.minBirth = Math.min(...this.birthYears.filter((e) => e > 0));
+      this.maxBirth = Math.max(...this.birthYears.filter((e) => e > 0));
+    },
     convertTime(date) {
       if (!date) return;
       return moment(date).format("DD/MM/YYYY");
+    },
+    chartEmployeesCV() {
+      new Chart(document.getElementById("employeee_chart"), {
+        type: "bar",
+        data: {
+          labels: this.employeesCVByYear.map((row) => row.year),
+          datasets: [
+            {
+              label: "Employees CV",
+              data: this.employeesCVByYear.map((row) => row.count),
+            },
+          ],
+        },
+      });
+    },
+    chartYear() {
+      new Chart(document.getElementById("cv_year_chart"), {
+        type: "bar",
+        data: {
+          labels: this.cvCurrentYear.map((row) => row.month),
+          datasets: [
+            {
+              label: "Employees CV",
+              data: this.cvCurrentYear.map((row) => row.count),
+            },
+          ],
+        },
+      });
     },
   },
 };

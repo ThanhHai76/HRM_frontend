@@ -10,7 +10,7 @@
               </li>
               <li class="breadcrumb-item active">Details Employees CV</li>
             </ul>
-            <h3>Edit Employees</h3>
+            <h3>Details Employees</h3>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
