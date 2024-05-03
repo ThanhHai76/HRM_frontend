@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import { getALLEmployees } from "@/services/employee-service";
+import { getALLEmployeesCVHome } from "@/services/employee-service";
 import moment from "moment";
 import Chart from "chart.js/auto";
 
@@ -204,7 +204,7 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await getALLEmployees();
+    const { data } = await getALLEmployeesCVHome();
     this.allEmployees = data;
     await this.analysisData();
     this.chartEmployeesCV();

@@ -5,6 +5,11 @@ async function getALLEmployees() {
   return data;
 }
 
+async function getALLEmployeesCVHome() {
+  const { data } = await HTTP.get("/hrm/employees-cv-home");
+  return data;
+}
+
 async function getReportCurrentYear(year) {
   const { data } = await HTTP.post("/hrm/report-current-year", { year });
   return data;
@@ -49,6 +54,7 @@ async function uploadExcelEmployee(file) {
 
 export {
   getALLEmployees,
+  getALLEmployeesCVHome,
   getReportCurrentYear,
   createEmployee,
   getEmployee,
