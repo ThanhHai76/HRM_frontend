@@ -161,7 +161,7 @@
           <div class="card flex-fill">
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Total CV In 2024</h5>
+                <h5 class="card-title">CV By Month In 2024</h5>
               </div>
             </div>
             <div class="card-body">
@@ -312,13 +312,16 @@ export default {
     },
     chartYear() {
       new Chart(document.getElementById("cv_year_chart"), {
-        type: "bar",
+        type: "line",
         data: {
           labels: this.cvCurrentYear.map((row) => row.month),
           datasets: [
             {
               label: "Employees CV",
               data: this.cvCurrentYear.map((row) => row.count),
+              fill: false,
+              borderColor: "rgb(75, 192, 192)",
+              tension: 0.1,
             },
           ],
         },
