@@ -34,9 +34,16 @@
                   <label class="form-control-label text-left">Password</label>
                   <input
                     class="form-control"
-                    type="password"
+                    :type="type"
                     v-model="dataRegister.password"
                   />
+                  <span
+                    class="fas fa-eye toggle-password"
+                    @click="showPassword"
+                  ></span>
+                </div>
+                <div class="text-bg-danger mb-2" v-if="message">
+                  {{ message }}
                 </div>
                 <div class="form-group mb-0">
                   <button
@@ -44,6 +51,12 @@
                     type="submit"
                     @click="onSubmit"
                   >
+                    <b-spinner
+                      v-if="isLoading"
+                      class="mr-2"
+                      variant="success"
+                      label="Spinning"
+                    ></b-spinner>
                     Register
                   </button>
                 </div>
@@ -76,6 +89,8 @@
       centered
       title="Notify"
       v-model="isShowModalSuccess"
+      ok-title="Confirm"
+      @ok="$router.push('/login')"
     >
       <div>
         <p>{{ messageNoti }}</p>
@@ -95,18 +110,28 @@ export default {
         email: "",
         password: "",
       },
+      type: "password",
       isShowModalSuccess: false,
       messageNoti: "",
+      message: null,
+      isLoading: false,
     };
   },
   methods: {
     async onSubmit() {
+      this.isLoading = true;
+      this.message = '';
       const { data, status } = await register(this.dataRegister);
-      console.log(data);
       if (status === 200) {
         this.isShowModalSuccess = true;
-        this.messageNoti = 'Register successful';
+        this.messageNoti = "Register successful";
+      } else {
+        this.message = data;
       }
+      this.isLoading = false;
+    },
+    showPassword() {
+      this.type = this.type === "password" ? "text" : "password";
     },
   },
   setup() {
@@ -115,4 +140,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.toggle-password {
+  top: 70%;
+}
+</style>

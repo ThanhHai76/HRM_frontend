@@ -70,6 +70,7 @@
       centered
       title="Notify"
       v-model="isShowModalSuccess"
+      ok-title="Confirm"
     >
       <div>
         <p class="text-success">{{ uploadSucessMessage }}</p>

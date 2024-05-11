@@ -40,14 +40,14 @@
             <div class="d-flex btn-employee">
               <button
                 type="button"
-                class="btn btn-outline-success btn-lg mr-4"
+                class="btn btn-outline-success mr-4"
                 @click="addEmployee"
               >
                 Add Employee CV
               </button>
               <button
                 type="button"
-                class="btn btn-outline-secondary btn-lg"
+                class="btn btn-outline-secondary"
                 @click="importExcel"
               >
                 Import Excel
@@ -102,7 +102,7 @@
                   label="Spinning"
                 ></b-spinner>
               </div>
-              <div v-if="employeeFilter.length > 0" class="button">
+              <div v-if="employeeFilter.length > 0" class="button mr-5">
                 <b-dropdown
                   id="dropdown-2"
                   :text="`Mỗi trang ${perPage}`"
@@ -136,13 +136,30 @@
                   >
                 </b-dropdown>
               </div>
+              <div class="button">
+                Filter Job:
+                <b-dropdown
+                  id="dropdown-3"
+                  :text="jobFilterSelected"
+                  variant="outline"
+                  class="m-md-2"
+                >
+                  <b-dropdown-item
+                    v-for="item in dataListJobs"
+                    :key="item._id"
+                    :active="jobFilterSelected === item.jobName"
+                    @click="changeJobFilter(item.jobName)"
+                    >{{ item.jobName }}</b-dropdown-item
+                  >
+                </b-dropdown>
+              </div>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered custom-table no-footer">
                 <thead>
                   <tr>
                     <th>STT</th>
-                    <td>Actions</td>
+                    <td>Thao tác</td>
                     <th>Nguồn</th>
                     <th>Ngày về/nhập CV</th>
                     <th>Job</th>
@@ -178,7 +195,9 @@
                   </tr>
                 </thead>
                 <tbody v-if="employeePerpage.length === 0">
-                  <tr><td colspan="12">Không có kết quả</td></tr>
+                  <tr>
+                    <td colspan="12">Không có kết quả</td>
+                  </tr>
                 </tbody>
                 <tbody v-else>
                   <tr v-for="(item, index) of employeePerpage" :key="item._id">
@@ -191,28 +210,28 @@
                           data-bs-toggle="dropdown"
                           aria-expanded="false"
                         >
-                          Options
+                          Tuỳ chọn
                         </button>
                         <ul class="dropdown-menu">
                           <li>
                             <a
                               class="dropdown-item"
                               @click="onDetailEmployee(item)"
-                              >Details</a
+                              >Chi tiết</a
                             >
                           </li>
                           <li>
                             <a
                               class="dropdown-item"
                               @click="onEditEmployee(item)"
-                              >Edit</a
+                              >Sửa</a
                             >
                           </li>
                           <li>
                             <a
                               class="dropdown-item"
                               @click="onDeleteEmployee(item)"
-                              >Delete</a
+                              >Xoá</a
                             >
                           </li>
                         </ul>
@@ -289,6 +308,7 @@
         title="Confirm delete"
         v-model="isShowModalDelete"
         @ok="confirmDeleteEmployee"
+        ok-title="Confirm"
       >
         <div>
           <p>Confirm to delete this Employee CV</p>
@@ -300,6 +320,7 @@
         centered
         title="Notify"
         v-model="isShowModalSuccess"
+        ok-title="Confirm"
       >
         <div>
           <p>{{ messageNoti }}</p>
@@ -311,6 +332,7 @@
 
 <script>
 import { deleteEmployee, getALLEmployees } from "@/services/employee-service";
+import { getAllJobs } from "@/services/job-service";
 import moment from "moment";
 
 export default {
@@ -327,12 +349,14 @@ export default {
       messageNoti: "",
       yearFilter: "Tất cả",
       isLoading: false,
+      dataListJobs: [],
+      jobFilterSelected: "Tất cả Jobs",
     };
   },
   computed: {
     employeeFilter() {
       const trimWord = this.searchWord.toUpperCase().trim();
-      return this.employeeYearFilter.filter(
+      return this.employeeJobFilter.filter(
         ({
           name,
           phone,
@@ -357,9 +381,18 @@ export default {
           (hrMark || "").toUpperCase().includes(trimWord)
       );
     },
+    employeeJobFilter() {
+      if (this.jobFilterSelected === "Tất cả Jobs")
+        return this.employeeYearFilter;
+      return this.employeeYearFilter.filter(
+        ({ job }) => job === this.jobFilterSelected
+      );
+    },
     employeeYearFilter() {
-      if (this.yearFilter === 'Tất cả') return this.allEmployees;
-      return this.allEmployees.filter(({ cvDate }) => (cvDate || "").includes(`/${this.yearFilter}`));
+      if (this.yearFilter === "Tất cả") return this.allEmployees;
+      return this.allEmployees.filter(({ cvDate }) =>
+        (cvDate || "").includes(`/${this.yearFilter}`)
+      );
     },
     employeePerpage() {
       return this.employeeFilter.filter((employee, index) => {
@@ -384,6 +417,7 @@ export default {
   },
   async mounted() {
     await this.fetchAllEmployees();
+    await this.fetchDataListJobs();
   },
   methods: {
     convertTime(date) {
@@ -434,12 +468,50 @@ export default {
     },
     changePerPage(perPage) {
       this.perPage = perPage;
-    }
+    },
+    async fetchDataListJobs() {
+      const { data } = await getAllJobs();
+      const selectAlll = {
+        _id: "All jobs",
+        jobName: "Tất cả Jobs",
+        orderDate: "",
+        amount: "",
+        jobDescription: "",
+        note: "",
+      };
+      this.dataListJobs = [selectAlll, ...data];
+    },
+    changeJobFilter(job) {
+      this.jobFilterSelected = job;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.table-responsive {
+  font-size: 14px;
+
+  th,
+  td,
+  button {
+    font-size: 14px;
+  }
+}
+
+.table td,
+.table th {
+  padding: 10px;
+}
+
+.table td {
+  white-space: pre-wrap;
+}
+
+.btn-employee {
+  font-size: 14px;
+}
+
 .action_label {
   cursor: pointer;
 }

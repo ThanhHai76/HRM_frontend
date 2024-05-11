@@ -23,17 +23,14 @@
       <div class="row">
         <div class="col-xl-12 col-sm-12 col-12 mb-4">
           <div v-if="isLoading">
-            <b-spinner
-              variant="success"
-              label="Spinning"
-            ></b-spinner>
+            <b-spinner variant="success" label="Spinning"></b-spinner>
           </div>
           <div v-else class="d-flex justify-content-between align-items-center">
             <div class="d-flex">
               <div class="button">
                 <b-dropdown
                   id="dropdown-2"
-                  :text="yearReport"
+                  :text="`Năm ${yearReport}`"
                   variant="outline"
                   class="m-md-2"
                 >
@@ -203,20 +200,22 @@
               >
                 <thead>
                   <tr>
-                    <th>STT</th>
-                    <th>Khối</th>
-                    <th>Team</th>
-                    <th>Jobs</th>
-                    <th>Job chạy tuyển dụng</th>
-                    <th>Ngày order job</th>
-                    <th>SL order</th>
-                    <th>Người phụ trách</th>
-                    <th>CV về</th>
-                    <th>CV Pass chấm</th>
-                    <th>Đến PV vòng 1</th>
-                    <th>Pass PV vòng 1</th>
-                    <th>Đến Offer</th>
-                    <th>Đi làm</th>
+                    <th class="sticky-col first-col" rowspan="2">STT</th>
+                    <th class="sticky-col second-col" rowspan="2">Khối</th>
+                    <th class="sticky-col third-col" rowspan="2">Team</th>
+                    <!-- <th class="sticky-col fourth-col">Jobs</th> -->
+                    <th class="sticky-col fifth-col" rowspan="2">
+                      Job chạy tuyển dụng
+                    </th>
+                    <th rowspan="2">Ngày order job</th>
+                    <th rowspan="2">SL order</th>
+                    <th rowspan="2">Người phụ trách</th>
+                    <th rowspan="2">CV về</th>
+                    <th rowspan="2">CV Pass chấm</th>
+                    <th rowspan="2">Đến PV vòng 1</th>
+                    <th rowspan="2">Pass PV vòng 1</th>
+                    <th rowspan="2">Đến Offer</th>
+                    <th rowspan="2">Đi làm</th>
                     <th colspan="3">Phân bổ nhân sự</th>
                     <th rowspan="2" class="align-center">Cần tuyển thêm</th>
                     <th rowspan="2">Tình trạng job (tháng)</th>
@@ -225,20 +224,6 @@
                     <th rowspan="2">Chi phí / Ứng viên</th>
                   </tr>
                   <tr>
-                    <th></th>
-                    <td></td>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
                     <th>Hà Nội</th>
                     <th>Sài Gòn</th>
                     <th>Tổng</th>
@@ -250,41 +235,105 @@
                     <th>FB ADs</th>
                     <th>HH</th>
                   </tr>
+                  <tr>
+                    <th class="sticky-col first-col">Tổng</th>
+                    <th class="sticky-col second-col"></th>
+                    <th class="sticky-col third-col"></th>
+                    <!-- <th class="sticky-col fourth-col">Jobs</th> -->
+                    <th class="sticky-col fifth-col"></th>
+                    <th></th>
+                    <th>
+                      {{ getTotalColumn("orderQuantity") }}
+                    </th>
+                    <th></th>
+                    <th>
+                      {{ getTotalColumn("cvHR") }}
+                    </th>
+                    <th>
+                      {{ getTotalColumn("cvPass") }}
+                    </th>
+                    <th>
+                      {{ getTotalColumn("pvRound1") }}
+                    </th>
+                    <th>
+                      {{ getTotalColumn("passRound1") }}
+                    </th>
+                    <th>
+                      {{ getTotalColumn("offer") }}
+                    </th>
+                    <th>
+                      {{ getTotalColumn("goWork") }}
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{{ getTotalColumn("recruitMore") }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(item, index) in dataReportShow" :key="index">
-                    <td>{{ index + 1 }}</td>
+                    <td class="sticky-col first-col">{{ index + 1 }}</td>
 
                     <td
                       v-if="index === 0 && item.block === 'DỰ ÁN'"
+                      class="sticky-col second-col"
                       rowspan="11"
+                      :style="{ background: '#C16C70' }"
                     >
                       <b>{{ item.block }}</b>
                     </td>
-                    <td v-else-if="item.block === 'Digital'">
+                    <td
+                      v-else-if="item.block === 'Digital'"
+                      class="sticky-col second-col"
+                      :style="{ background: '#F6B26B' }"
+                    >
                       <b>{{ item.block }}</b>
                     </td>
 
                     <td
                       v-if="index === 0 && item.team === 'KAILAS MEDIA'"
+                      class="sticky-col third-col"
                       rowspan="7"
+                      :style="{ background: '#DEEEB4' }"
                     >
                       <b>{{ item.team }}</b>
                     </td>
                     <td
                       v-else-if="index === 9 && item.team === 'TĐCS'"
+                      class="sticky-col third-col"
                       rowspan="2"
                     >
                       <b>{{ item.team }}</b>
                     </td>
                     <td
-                      v-else-if="['QTCS', 'GBD', 'Digital'].includes(item.team)"
+                      v-else-if="['QTCS', 'GBD'].includes(item.team)"
+                      class="sticky-col third-col"
+                      :style="{ background: '#C1CBED' }"
+                    >
+                      <b>{{ item.team }}</b>
+                    </td>
+                    <td
+                      v-else-if="['Digital'].includes(item.team)"
+                      class="sticky-col third-col"
+                      :style="{ background: '#F6B26B' }"
                     >
                       <b>{{ item.team }}</b>
                     </td>
 
-                    <td>{{ item.job }}</td>
-                    <td>{{ item.jobRecruitment }}</td>
+                    <!-- <td class="sticky-col fourth-col">{{ item.job }}</td> -->
+                    <td class="sticky-col fifth-col">
+                      {{ item.jobRecruitment }}
+                    </td>
                     <td>{{ item.orderJobDate }}</td>
                     <td>{{ item.orderQuantity }}</td>
                     <td>{{ item.personInCharge }}</td>
@@ -418,14 +467,18 @@ export default {
   computed: {
     dataReportShow() {
       const dataReport = this.dataReport.map((item) => {
+        const orderQuantity = this.dataListJobs.find(
+          (job) => job.jobName === item.job
+        )?.amount;
+        const goWork = this.dataReportFilter.filter(
+          (cvItem) => cvItem.job === item.job && cvItem.goWork === "Đi làm"
+        ).length;
         return {
           ...item,
           orderJobDate: this.dataListJobs.find(
             (job) => job.jobName === item.job
           )?.orderDate,
-          orderQuantity: this.dataListJobs.find(
-            (job) => job.jobName === item.job
-          )?.amount,
+          orderQuantity: orderQuantity,
           personInCharge: "Tổng",
           cvHR: this.dataReportFilter.filter(
             (cvItem) => cvItem.job === item.job
@@ -442,15 +495,13 @@ export default {
           offer: this.dataReportFilter.filter(
             (cvItem) => cvItem.job === item.job && cvItem.offer === "Đã gọi"
           ).length,
-          goWork: this.dataReportFilter.filter(
-            (cvItem) => cvItem.job === item.job && cvItem.goWork === "Đi làm"
-          ).length,
+          goWork: goWork,
           personnelAllocation: {
             HN: 0,
             SG: 0,
             total: 0,
           },
-          recruitMore: 0,
+          recruitMore: orderQuantity - goWork || 0,
           jobState: "",
           sourceHR: {
             FBFree: this.dataReportFilter.filter(
@@ -475,7 +526,10 @@ export default {
               (cvItem) => cvItem.job === item.job && cvItem.source === "HH"
             ).length,
           },
-          recruitFees: 0,
+          recruitFees: this.formatMoney(
+            this.dataListJobs.find((job) => job.jobName === item.job)
+              ?.recruitmentCost
+          ),
           recruitFeesCandidate: 0,
         };
       });
@@ -574,12 +628,93 @@ export default {
     changeMonth(month) {
       this.typeMonth = month;
     },
+    getTotalColumn(keyColumn) {
+      return this.dataReportShow.reduce(
+        (total, report) => total + (report[keyColumn] || 0),
+        0
+      );
+    },
+    formatMoney(number) {
+      const [integerPart, decimalPart] = String(number).split(".");
+      const formattedIntegerPart = integerPart.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        "."
+      );
+      if (!number) return "";
+      return decimalPart
+        ? formattedIntegerPart + "." + decimalPart
+        : formattedIntegerPart + " VND";
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.table-responsive {
+  font-size: 14px;
+
+  th {
+    font-size: 14px;
+  }
+  th,
+  td {
+    border: 1px solid #bbc0c2;
+  }
+}
+
+.table td,
+.table th {
+  padding: 10px;
+}
+
 .table thead th {
   vertical-align: middle;
+}
+
+.table-responsive tr td:first-child,
+.table-responsive tr th:first-child {
+  padding-left: 10px;
+}
+
+.sticky-col {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: white;
+}
+.first-col {
+  width: 60px;
+  min-width: 61px;
+  max-width: 61px;
+  left: -1px;
+}
+.second-col {
+  width: 120px;
+  min-width: 121px;
+  max-width: 120px;
+  left: 59px;
+}
+.third-col {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  left: 179px;
+}
+.fourth-col {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+  left: 328px;
+}
+.fifth-col {
+  width: 250px;
+  min-width: 250px;
+  max-width: 250px;
+  left: 328px;
+}
+.sixth-col {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  left: 578px;
 }
 </style>

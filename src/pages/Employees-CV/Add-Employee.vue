@@ -5,10 +5,12 @@
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a @click="$router.push('/employee')">Employee</a></li>
-              <li class="breadcrumb-item active">Edit Employees CV</li>
+              <li class="breadcrumb-item">
+                <a @click="$router.push('/employee')">Employee</a>
+              </li>
+              <li class="breadcrumb-item active">Add Employees</li>
             </ul>
-            <h3>Edit Employees</h3>
+            <h3>Add Employees</h3>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
@@ -350,13 +352,13 @@
           <div class="row">
             <div class="col-xl-12 col-sm-12 col-12">
               <div class="form-btn">
-                <a @click="onEditEmployee" class="btn btn-apply w-auto">
+                <a @click="onAddEmployee" class="btn btn-apply w-auto">
                   <b-spinner
-                    v-if="isEditing"
+                    v-if="isAdding"
                     variant="success"
                     label="Spinning"
                   ></b-spinner>
-                  <span v-else>Save</span>
+                  <span v-else>Add Employee</span>
                 </a>
                 <a @click="onCancel" class="btn btn-secondary">Cancel</a>
               </div>
@@ -370,6 +372,7 @@
           title="Confirm cancel"
           v-model="isShowModalCancel"
           @ok="$router.push('/employee')"
+          ok-title="Confirm"
         >
           <div>
             <p>{{ messageNoti }}</p>
@@ -382,6 +385,7 @@
           title="Notify"
           v-model="isShowModalSuccess"
           @ok="$router.push('/employee')"
+          ok-title="Confirm"
         >
           <div>
             <p>{{ messageNoti }}</p>
@@ -393,10 +397,10 @@
 </template>
 
 <script>
-import { getEmployee, updateEmployee } from "@/services/employee-service";
+import { createEmployee } from "@/services/employee-service";
 
 export default {
-  name: "EditEmployee",
+  name: "AddEmployee",
   data() {
     return {
       dataEmployee: {
@@ -435,25 +439,22 @@ export default {
       isShowModalCancel: false,
       isShowModalSuccess: false,
       messageNoti: "",
-      isEditing: false,
+      isAdding: false,
     };
   },
-  mounted() {
-    this.getDataEmployee();
-  },
   methods: {
-    async getDataEmployee() {
-      const { data } = await getEmployee(this.$route.params.id);
-      this.dataEmployee = { ...this.dataEmployee, ...data };
-    },
-    async onEditEmployee() {
-      this.isEditing = true;
-      const { status } = await updateEmployee(this.$route.params.id, this.dataEmployee);
+    async onAddEmployee() {
+      if (!this.dataEmployee.phone) {
+        alert("You should add information");
+        return;
+      }
+      this.isAdding = true;
+      const { status } = await createEmployee(this.dataEmployee);
       if (status === 200) {
         this.isShowModalSuccess = true;
-        this.messageNoti = "Update a employee CV successfully";
+        this.messageNoti = "Add a employee successfully";
       }
-      this.isEditing = false;
+      this.isAdding = false;
     },
     onCancel() {
       this.isShowModalCancel = true;
@@ -463,4 +464,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

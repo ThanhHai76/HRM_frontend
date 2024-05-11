@@ -50,6 +50,7 @@
                     <th>Ngày Order</th>
                     <th>Số lượng</th>
                     <th>JD</th>
+                    <th>Chi phí tuyển dụng</th>
                     <th>Note</th>
                     <th>Action</th>
                   </tr>
@@ -61,6 +62,7 @@
                     <td>{{ item.orderDate }}</td>
                     <td>{{ item.amount }}</td>
                     <td>{{ item.jobDescription }}</td>
+                    <td>{{ formatMoney(item.recruitmentCost) }}</td>
                     <td>{{ item.note }}</td>
                     <td>
                       <div class="dropdown">
@@ -101,6 +103,7 @@
         v-model="isShowModalCreateJob"
         @ok="createJob"
         @cancel="cancelCreateJob"
+        ok-title="Confirm"
       >
         <div>
           <b-form>
@@ -156,6 +159,21 @@
               ></b-form-input>
             </b-form-group>
 
+            <b-form-group
+              id="input-group-1"
+              label="Chi phí tuyển dụng"
+              :invalid-feedback="invalidFeedback"
+            >
+              <b-form-input
+                id="input-1"
+                v-model="formCreate.recruitmentCost"
+                placeholder="Nhập số lượng"
+                required
+                type="number"
+                :state="formCreate.recruitmentCost !== ''"
+              ></b-form-input>
+            </b-form-group>
+
             <b-form-group id="input-group-1" label="Note">
               <b-form-input
                 id="input-1"
@@ -172,6 +190,7 @@
         centered
         title="Notify"
         v-model="isShowModalSuccess"
+        ok-title="Confirm"
       >
         <div>
           <p>{{ messageNoti }}</p>
@@ -184,6 +203,7 @@
         title="Confirm delete"
         v-model="isShowModalDeleteJob"
         @ok="confirmDeleteJob"
+        ok-title="Confirm"
       >
         <div>
           <p>Confirm to delete this Employee CV</p>
@@ -194,7 +214,12 @@
 </template>
 
 <script>
-import { createJob, deleteJob, getAllJobs, updateJob } from "@/services/job-service";
+import {
+  createJob,
+  deleteJob,
+  getAllJobs,
+  updateJob,
+} from "@/services/job-service";
 export default {
   setup() {
     return {};
@@ -208,6 +233,7 @@ export default {
         orderDate: "",
         amount: "",
         jobDescription: "",
+        recruitmentCost: "",
         note: "",
       },
       isShowModalSuccess: false,
@@ -231,7 +257,7 @@ export default {
     },
     amountTotal() {
       return this.dataListJobs.reduce((total, job) => total + job.amount, 0);
-    }
+    },
   },
   async mounted() {
     await this.fetchDataListJobs();
@@ -243,6 +269,7 @@ export default {
         orderDate: "",
         amount: "",
         jobDescription: "",
+        recruitmentCost: "",
         note: "",
       };
       this.titleModal = "Create job";
@@ -265,7 +292,9 @@ export default {
         : await createJob(this.formCreate);
       if (status === 200) {
         this.isShowModalSuccess = true;
-        this.messageNoti = `${this.isEditMode ? 'Updated' : 'Created'} job successfully`;
+        this.messageNoti = `${
+          this.isEditMode ? "Updated" : "Created"
+        } job successfully`;
       }
       await this.fetchDataListJobs();
       this.isShowModalCreateJob = false;
@@ -280,13 +309,14 @@ export default {
     onEditJob(item) {
       this.isShowModalCreateJob = true;
       this.isEditMode = true;
-      this.titleModal = 'Edit Job';
+      this.titleModal = "Edit Job";
       this.selectedJob = item._id;
       this.formCreate = {
         jobName: item.jobName,
         orderDate: item.orderDate,
         amount: item.amount,
         jobDescription: item.jobDescription,
+        recruitmentCost: item.recruitmentCost,
         note: item.note,
       };
     },
@@ -303,8 +333,38 @@ export default {
         this.messageNoti = "Deleted successfully";
       }
     },
+    formatMoney(number) {
+      // Convert number to string and split into integer and decimal parts
+      const [integerPart, decimalPart] = String(number).split(".");
+
+      // Add dots as thousand separators to the integer part
+      const formattedIntegerPart = integerPart.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        "."
+      );
+
+      if (!number) return "";
+
+      // Combine formatted integer part with decimal part (if exists)
+      return decimalPart
+        ? formattedIntegerPart + "." + decimalPart
+        : formattedIntegerPart + " VND";
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.table-responsive {
+  font-size: 14px;
+
+  th {
+    font-size: 14px;
+  }
+}
+
+.table td,
+.table th {
+  padding: 10px;
+}
+</style>

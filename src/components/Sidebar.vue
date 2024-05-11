@@ -34,12 +34,18 @@
                 <span>List Order Job</span>
               </router-link>
             </li>
-            <li title="Calendar" :class="{ active: path === '/calendar' }">
+            <li title="Tracking" :class="{ active: path === '/tracking-candidates' }">
+              <router-link to="/tracking-candidates">
+                <img src="@/assets/img/calendar.svg" alt="sidebar_img" />
+                <span>Tracking</span>
+              </router-link>
+            </li> 
+            <!-- <li title="Calendar" :class="{ active: path === '/calendar' }">
               <router-link to="/calendar">
                 <img src="@/assets/img/calendar.svg" alt="sidebar_img" />
                 <span>Calendar</span>
               </router-link>
-            </li>
+            </li> -->
             <li title="Todo List" :class="{ active: path === '/todo-list' }">
               <router-link to="/todo-list">
                 <img src="@/assets/img/report.svg" alt="sidebar_img" />

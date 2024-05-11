@@ -6,11 +6,11 @@
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
-                <a @click="$router.push('/employee')">Employee</a>
+                <a @click="$router.push('/tracking-candidates')">Tracking</a>
               </li>
-              <li class="breadcrumb-item active">Add Employees</li>
+              <li class="breadcrumb-item active">Edit Tracking Candidate</li>
             </ul>
-            <h3>Add Employees</h3>
+            <h3>Edit Tracking Candidate</h3>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
@@ -22,78 +22,42 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.source"
-                      placeholder="Nguồn"
-                    />
+                    <label class="label">Ngày về/ Nhập CV</label>
+                    <VueDatePicker
+                      v-model="dataTracking.cvDate"
+                      :enable-time-picker="false"
+                      placeholder="Ngày về/ Nhập CV"
+                    ></VueDatePicker>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Job</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.cvDate"
-                      placeholder="Ngày về/nhập CV"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.job"
+                      v-model="dataTracking.job"
                       placeholder="Job"
                     />
                   </div>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Họ và tên</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.name"
+                      v-model="dataTracking.name"
                       placeholder="Họ và tên"
                     />
                   </div>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">SĐT</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.birthYear"
-                      placeholder="Năm sinh"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.academicLevel"
-                      placeholder="Trình độ học vấn"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.specialized"
-                      placeholder="Chuyên ngành"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.phone"
+                      v-model="dataTracking.phone"
                       placeholder="SĐT"
                     />
                   </div>
@@ -102,68 +66,73 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Địa chỉ Email</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.email"
-                      placeholder="Địa chỉ mail"
+                      v-model="dataTracking.email"
+                      placeholder="Địa chỉ Email"
                     />
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Link CV</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.linkCV"
+                      v-model="dataTracking.linkCV"
                       placeholder="Link CV"
                     />
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.linkSP"
-                      placeholder="Link SP"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.linkFB"
-                      placeholder="Link FB"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
-              <h2 class="card-titles">Employment Details</h2>
+              <h2 class="card-titles">Interview Details</h2>
             </div>
             <div class="card-body">
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Ngày PV</label>
+                    <VueDatePicker
+                      v-model="dataTracking.interviewDate"
+                      :enable-time-picker="false"
+                      placeholder="Ngày PV"
+                    ></VueDatePicker>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-sm-12 col-12">
+                  <div class="form-group">
+                    <label class="label">Thời gian PV vòng 1</label>
+                    <VueDatePicker
+                      v-model="dataTracking.interviewTime"
+                      placeholder="Thời gian PV vòng 1"
+                    ></VueDatePicker>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-sm-12 col-12">
+                  <div class="form-group">
+                    <label class="label">Người PV</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.companyUV"
-                      placeholder="Đơn vị UV từng làm"
+                      v-model="dataTracking.interviewer"
+                      placeholder="Người PV"
                     />
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Phòng PV</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.hrSuggest"
-                      placeholder="HR suggest"
+                      v-model="dataTracking.interviewRoom"
+                      placeholder="Phòng PV"
                     />
                   </div>
                 </div>
@@ -171,19 +140,42 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Team</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.hrMark"
-                      placeholder="HR chấm"
+                      v-model="dataTracking.team"
+                      placeholder="Team"
                     />
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Thay đổi thời gian PV</label>
+                    <VueDatePicker
+                      v-model="dataTracking.interviewTimeChange"
+                      placeholder="Thay đổi thời gian PV"
+                    ></VueDatePicker>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-sm-12 col-12">
+                  <div class="form-group">
+                    <label class="label">Tình trạng tham gia PV V1</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.partMark"
-                      placeholder="Bộ phận chấm"
+                      v-model="dataTracking.joinRound1Status"
+                      placeholder="Tình trạng tham gia PV V1"
+                    />
+                  </div>
+                </div>
+                <div class="col-xl-6 col-sm-12 col-12">
+                  <div class="form-group">
+                    <label class="label">Test/ PV vòng 2</label>
+                    <input
+                      type="text"
+                      v-model="dataTracking.testInterviewRound2"
+                      placeholder="Test/ PV vòng 2"
                     />
                   </div>
                 </div>
@@ -191,37 +183,21 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Tình trạng tham gia vòng 2</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.round1"
-                      placeholder="Vòng 1"
+                      v-model="dataTracking.joinRound2Status"
+                      placeholder="Tình trạng tham gia vòng 2"
                     />
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Đánh giá</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.joinRound1"
-                      placeholder="Tham gia Vòng 1"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.interviewV1"
-                      placeholder="Kết quả PV V1"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.notes"
-                      placeholder="Notes"
+                      v-model="dataTracking.evaluation"
+                      placeholder="Đánh giá"
                     />
                   </div>
                 </div>
@@ -229,79 +205,63 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Kết quả PV</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.round2"
-                      placeholder="Vòng 2"
+                      v-model="dataTracking.interviewResult"
+                      placeholder="Kết quả PV"
                     />
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.joinRound2"
-                      placeholder="Tham gia Vòng 2"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.interviewV2"
-                      placeholder="Kết quả PV V2"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-titles">Salary/Offer Details</h2>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.offer"
-                      placeholder="OFFER"
-                    />
+                    <label class="label">Ngày chốt KQPV</label>
+                    <VueDatePicker
+                      v-model="dataTracking.interviewResultClosingDate"
+                      :enable-time-picker="false"
+                      placeholder="Ngày chốt KQPV"
+                    ></VueDatePicker>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Kết quả offer</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.offerResult"
+                      v-model="dataTracking.offerResult"
                       placeholder="Kết quả offer"
                     />
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-12 col-sm-12 col-12">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-titles">Tracking</h2>
+            </div>
+            <div class="card-body">
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Lương chính thức</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.notes2"
-                      placeholder="Notes"
+                      v-model="dataTracking.officialSalary"
+                      placeholder="Lương chính thức"
                     />
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Lương thử việc</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.goWork"
-                      placeholder="ĐI LÀM"
+                      v-model="dataTracking.probationarySalary"
+                      placeholder="Lương thử việc"
                     />
                   </div>
                 </div>
@@ -309,19 +269,20 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.onboardDate"
-                      placeholder="Ngày đi làm"
-                    />
+                    <label class="label">Ngày bắt đầu đi làm</label>
+                    <VueDatePicker
+                      v-model="dataTracking.startWorkDate"
+                      placeholder="Ngày bắt đầu đi làm"
+                    ></VueDatePicker>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Thời gian thử việc</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.probationTime"
-                      placeholder="THỬ VIỆC Thời gian"
+                      v-model="dataTracking.probationaryTime"
+                      placeholder="Thời gian thử việc"
                     />
                   </div>
                 </div>
@@ -329,36 +290,61 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Ngày hết thử việc</label>
+                    <VueDatePicker
+                      v-model="dataTracking.probationaryEndDate"
+                      placeholder="Ngày hết thử việc"
+                    ></VueDatePicker>
+                  </div>
+                </div>
+                <div class="col-xl-6 col-sm-12 col-12">
+                  <div class="form-group">
+                    <label class="label">Đi mail</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.probationResult"
-                      placeholder="Kết quả thử việc"
+                      v-model="dataTracking.sendMail"
+                      placeholder="Đi mail "
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-sm-12 col-12">
+                  <div class="form-group">
+                    <label class="label">Tình trạng thử việc</label>
+                    <input
+                      type="text"
+                      v-model="dataTracking.probationStatus"
+                      placeholder="Tình trạng thử việc"
                     />
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Update tình trạng</label>
                     <input
                       type="text"
-                      v-model="dataEmployee.notes3"
-                      placeholder="Note"
+                      v-model="dataTracking.statusUpdate"
+                      placeholder="Update tình trạng"
                     />
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
+        <div class="col-xl-12 col-sm-12 col-12">
           <div class="row">
             <div class="col-xl-12 col-sm-12 col-12">
               <div class="form-btn">
-                <a @click="onAddEmployee" class="btn btn-apply w-auto">
+                <a @click="onEditTracking" class="btn btn-apply w-auto">
                   <b-spinner
-                    v-if="isAdding"
+                    v-if="isCreating"
                     variant="success"
                     label="Spinning"
                   ></b-spinner>
-                  <span v-else>Add Employee</span>
+                  <span v-else>Save</span>
                 </a>
                 <a @click="onCancel" class="btn btn-secondary">Cancel</a>
               </div>
@@ -371,7 +357,8 @@
           centered
           title="Confirm cancel"
           v-model="isShowModalCancel"
-          @ok="$router.push('/employee')"
+          @ok="$router.push('/tracking-candidates')"
+          ok-title="Confirm"
         >
           <div>
             <p>{{ messageNoti }}</p>
@@ -383,7 +370,8 @@
           centered
           title="Notify"
           v-model="isShowModalSuccess"
-          @ok="$router.push('/employee')"
+          @ok="$router.push('/tracking-candidates')"
+          ok-title="Confirm"
         >
           <div>
             <p>{{ messageNoti }}</p>
@@ -395,64 +383,63 @@
 </template>
 
 <script>
-import { createEmployee } from "@/services/employee-service";
+import { updateTrack, getTrack } from "@/services/track-service";
 
 export default {
-  name: "AddEmployee",
+  name: "AddTracking",
   data() {
     return {
-      dataEmployee: {
-        source: "",
-        cvDate: "",
+      dataTracking: {
         job: "",
+        cvDate: "",
         name: "",
-        birthYear: "",
-        academicLevel: "",
-        specialized: "",
         phone: "",
         email: "",
         linkCV: "",
-        linkSP: "",
-        linkFB: "",
-        companyUV: "",
-        hrSuggest: "",
-        hrMark: "",
-        partMark: "",
-        round1: "",
-        joinRound1: "",
-        interviewV1: "",
-        round2: "",
-        joinRound2: "",
-        interviewV2: "",
-        notes: "",
-        offer: "",
+        interviewDate: "",
+        interviewTime: "",
+        interviewer: "",
+        interviewRoom: "",
+        team: "",
+        interviewTimeChange: "",
+        joinRound1Status: "",
+        testInterviewRound2: "",
+        joinRound2Status: "",
+        evaluation: "",
+        interviewResult: "",
+        interviewResultClosingDate: "",
         offerResult: "",
-        notes2: "",
-        goWork: "",
-        onboardDate: "",
-        probationTime: "",
-        probationResult: "",
-        notes3: "",
+        officialSalary: "",
+        probationarySalary: "",
+        startWorkDate: "",
+        probationaryTime: "",
+        probationaryEndDate: "",
+        sendMail: "",
+        probationStatus: "",
+        statusUpdate: "",
       },
       isShowModalCancel: false,
       isShowModalSuccess: false,
       messageNoti: "",
-      isAdding: false,
+      isCreating: false,
     };
   },
+  mounted() {
+    this.getDataTracking();
+  },
   methods: {
-    async onAddEmployee() {
-      if (!this.dataEmployee.phone) {
-        alert("You should add information");
-        return;
-      }
-      this.isAdding = true;
-      const { status } = await createEmployee(this.dataEmployee);
+    async getDataTracking() {
+      const { data } = await getTrack(this.$route.params.id);
+      this.dataTracking = { ...this.dataTracking, ...data };
+    },
+    async onEditTracking() {
+        this.isCreating = true;
+      const { status } = await updateTrack(this.$route.params.id, this.dataTracking);
       if (status === 200) {
         this.isShowModalSuccess = true;
-        this.messageNoti = "Add a employee successfully";
+        this.messageNoti = "Add a tracking candidate successfully";
       }
-      this.isAdding = false;
+      this.isCreating = false;
     },
     onCancel() {
       this.isShowModalCancel = true;
@@ -462,4 +449,25 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.form-group textarea {
+  padding: 20px;
+
+  &:focus {
+    border: 1px solid #ebecf1 !important;
+  }
+}
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.label {
+  padding-right: 20px;
+  text-align: left;
+  width: 150px;
+}
+input {
+  height: 38px !important;
+}
+</style>

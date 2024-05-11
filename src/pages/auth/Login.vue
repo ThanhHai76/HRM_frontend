@@ -64,6 +64,12 @@
                   type="submit"
                   @click="onSubmit"
                 >
+                <b-spinner
+                  v-if="isLoading"
+                  class="mr-2"
+                  variant="success"
+                  label="Spinning"
+                ></b-spinner>
                   Login
                 </button>
                 <div class="login-or">
@@ -103,10 +109,12 @@ export default {
       },
       type: "password",
       message: null,
+      isLoading: false,
     };
   },
   methods: {
     async onSubmit() {
+      this.isLoading = true;
       const { data, status } = await login(this.dataLogin);
       if (status === 200) {
         const userData = { ...this.dataLogin, userName: data.name };
@@ -116,6 +124,7 @@ export default {
         this.$router.push("/login");
         this.message = data;
       }
+      this.isLoading = false;
     },
     showPassword() {
       this.type = this.type === "password" ? "text" : "password";

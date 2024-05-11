@@ -2,20 +2,23 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/pages/HomePage.vue";
 import LoginPage from "@/pages/auth/Login.vue";
 import RegisterPage from "@/pages/auth/Register.vue";
-import EmployeePage from "@/pages/Employee.vue";
+import EmployeePage from "@/pages/Employees-CV/Employee.vue";
 import CalendarPage from "@/pages/Calendar.vue";
 import LeavePage from "@/pages/Leave.vue";
 import ErrorPage from "@/pages/Error.vue";
-import AddEmployeePage from "@/pages/Add-Employee.vue";
-import EditEmployeePage from "@/pages/Edit-Employee.vue";
-import DetailEmployeePage from "@/pages/Detail-Employee.vue";
+import AddEmployeePage from "@/pages/Employees-CV/Add-Employee.vue";
+import EditEmployeePage from "@/pages/Employees-CV/Edit-Employee.vue";
+import DetailEmployeePage from "@/pages/Employees-CV/Detail-Employee.vue";
 import ImportExcelEmployee from "@/pages/Import-Excel.vue";
 import TodoListPage from "@/pages/TodoList.vue";
 import ReportPage from "@/pages/Report.vue";
 import ListOrderJobPage from "@/pages/ListOrderJob.vue";
+import TrackingPage from "@/pages/Tracking/Tracking.vue";
+import AddTrackingPage from "@/pages/Tracking/Add-Tracking.vue";
+import EditTrackingPage from "@/pages/Tracking/Edit-Tracking.vue";
 
 import { checkAccessMiddleware } from "./middleware";
-
+      
 const routes = [
   {
     path: "/",
@@ -106,6 +109,24 @@ const routes = [
     name: "ListOrderJobPage", 
     component: ListOrderJobPage,
     meta: { isAuth: true, title: 'List Order Job Page' }
+  },
+  {
+    path: "/tracking-candidates",
+    name: "TrackingPage", 
+    component: TrackingPage,
+    meta: { isAuth: true, title: 'Tracking Candidates' }
+  },
+  {
+    path: "/add-tracking-candidate",
+    name: "AddTrackingPage", 
+    component: AddTrackingPage,
+    meta: { isAuth: true, title: 'Add Tracking Candidates' }
+  },
+  {
+    path: "/edit-tracking-candidate/:id",
+    name: "EditTrackingPage", 
+    component: EditTrackingPage,
+    meta: { isAuth: true, title: 'Edit Tracking Candidates' }
   },
 ];
 
