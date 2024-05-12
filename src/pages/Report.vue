@@ -269,15 +269,15 @@
                     <th></th>
                     <th>{{ getTotalColumn("recruitMore") }}</th>
                     <th></th>
+                    <th>{{ getTotalColumn("sourceHR", "FBFree") }}</th>
+                    <th>{{ getTotalColumn("sourceHR", "TopCV") }}</th>
+                    <th>{{ getTotalColumn("sourceHR", "Refer") }}</th>
+                    <th>{{ getTotalColumn("sourceHR", "YBOX") }}</th>
+                    <th>{{ getTotalColumn("sourceHR", "VNW") }}</th>
+                    <th>{{ getTotalColumn("sourceHR", "FBAds") }}</th>
+                    <th>{{ getTotalColumn("sourceHR", "HH") }}</th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>{{ getTotalColumn("recruitFeesCandidate") }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -312,6 +312,7 @@
                       v-else-if="index === 9 && item.team === 'TĐCS'"
                       class="sticky-col third-col"
                       rowspan="2"
+                      :style="{ background: '#E7E7E7' }"
                     >
                       <b>{{ item.team }}</b>
                     </td>
@@ -628,7 +629,12 @@ export default {
     changeMonth(month) {
       this.typeMonth = month;
     },
-    getTotalColumn(keyColumn) {
+    getTotalColumn(keyColumn, keyColumnMore) {
+      if (keyColumnMore)
+        return this.dataReportShow.reduce(
+          (total, report) => total + (report[keyColumn][keyColumnMore] || 0),
+          0
+        );
       return this.dataReportShow.reduce(
         (total, report) => total + (report[keyColumn] || 0),
         0
