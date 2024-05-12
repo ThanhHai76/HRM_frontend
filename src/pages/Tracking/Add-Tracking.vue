@@ -162,21 +162,21 @@
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
                     <label class="label">Tình trạng tham gia PV V1</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.joinRound1Status"
+                    <b-form-select
                       placeholder="Tình trạng tham gia PV V1"
-                    />
+                      v-model="dataTracking.joinRound1Status"
+                      :options="interviewOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
                     <label class="label">Test/ PV vòng 2</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.testInterviewRound2"
+                    <b-form-select
                       placeholder="Test/ PV vòng 2"
-                    />
+                      v-model="dataTracking.testInterviewRound2"
+                      :options="testInterviewRound2Options"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
@@ -184,11 +184,11 @@
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
                     <label class="label">Tình trạng tham gia vòng 2</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.joinRound2Status"
+                    <b-form-select
                       placeholder="Tình trạng tham gia vòng 2"
-                    />
+                      v-model="dataTracking.joinRound2Status"
+                      :options="joinRound2StatusOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
@@ -206,11 +206,11 @@
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
                     <label class="label">Kết quả PV</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.interviewResult"
+                    <b-form-select
                       placeholder="Kết quả PV"
-                    />
+                      v-model="dataTracking.interviewResult"
+                      :options="interviewResultOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
@@ -226,11 +226,11 @@
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
                     <label class="label">Kết quả offer</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.offerResult"
+                    <b-form-select
                       placeholder="Kết quả offer"
-                    />
+                      v-model="dataTracking.offerResult"
+                      :options="interviewResultOptions"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
@@ -312,11 +312,11 @@
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
                     <label class="label">Tình trạng thử việc</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.probationStatus"
+                    <b-form-select
                       placeholder="Tình trạng thử việc"
-                    />
+                      v-model="dataTracking.probationStatus"
+                      :options="probationStatusOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
@@ -422,6 +422,33 @@ export default {
       isShowModalSuccess: false,
       messageNoti: "",
       isCreating: false,
+      interviewOptions: [
+        { value: "Đến", text: "Đến" },
+        { value: "Đến muộn", text: "Đến muộn" },
+        { value: "Cancel", text: "Cancel" },
+      ],
+      testInterviewRound2Options: [
+        { value: "Test", text: "Test" },
+        { value: "PV V2", text: "PV V2" },
+        { value: "Không", text: "Không" },
+      ],
+      joinRound2StatusOptions: [
+        { value: "Yes", text: "Yes" },
+        { value: "No", text: "No" },
+      ],
+      interviewResultOptions: [
+        { value: "Pass", text: "Pass" },
+        { value: "Fail", text: "Fail" },
+      ],
+      probationStatusOptions: [
+        { value: "Đang thử việc", text: "Đang thử việc" },
+        { value: "Từ chối việc", text: "Từ chối việc" },
+        { value: "Nghỉ việc", text: "Nghỉ việc" },
+        { value: "Fail thử việc", text: "Fail thử việc" },
+        { value: "Pass việc", text: "Pass việc" },
+        { value: "Thực tập", text: "Thực tập" },
+        { value: "Chưa đi làm", text: "Chưa đi làm" },
+      ],
     };
   },
   methods: {
@@ -453,6 +480,11 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  input,
+  select {
+    height: 40px;
+  }
 }
 .label {
   padding-right: 20px;

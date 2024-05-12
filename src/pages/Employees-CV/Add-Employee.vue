@@ -22,6 +22,7 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Nguồn</label>
                     <input
                       type="text"
                       v-model="dataEmployee.source"
@@ -31,6 +32,7 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Ngày về/nhập CV</label>
                     <input
                       type="text"
                       v-model="dataEmployee.cvDate"
@@ -42,6 +44,7 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Job</label>
                     <input
                       type="text"
                       v-model="dataEmployee.job"
@@ -51,6 +54,7 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Họ và tên</label>
                     <input
                       type="text"
                       v-model="dataEmployee.name"
@@ -62,6 +66,7 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Năm sinh</label>
                     <input
                       type="text"
                       v-model="dataEmployee.birthYear"
@@ -71,6 +76,7 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Trình độ học vấn</label>
                     <input
                       type="text"
                       v-model="dataEmployee.academicLevel"
@@ -82,6 +88,7 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Chuyên ngành</label>
                     <input
                       type="text"
                       v-model="dataEmployee.specialized"
@@ -91,6 +98,7 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Số điện thoại</label>
                     <input
                       type="text"
                       v-model="dataEmployee.phone"
@@ -102,6 +110,7 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Địa chỉ mail</label>
                     <input
                       type="text"
                       v-model="dataEmployee.email"
@@ -111,6 +120,7 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Link CV</label>
                     <input
                       type="text"
                       v-model="dataEmployee.linkCV"
@@ -122,6 +132,7 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Link SP</label>
                     <input
                       type="text"
                       v-model="dataEmployee.linkSP"
@@ -131,6 +142,7 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Link FB</label>
                     <input
                       type="text"
                       v-model="dataEmployee.linkFB"
@@ -150,74 +162,82 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
+                  <div class="form-group text-area-group">
+                    <label class="label">Đơn vị UV từng làm</label>
+                    <textarea
                       type="text"
                       v-model="dataEmployee.companyUV"
                       placeholder="Đơn vị UV từng làm"
-                    />
+                    ></textarea>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <input
+                  <div class="form-group text-area-group">
+                    <label class="label">HR suggest</label>
+                    <textarea
                       type="text"
                       v-model="dataEmployee.hrSuggest"
                       placeholder="HR suggest"
-                    />
+                    ></textarea>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.hrMark"
+                    <label class="label">HR chấm</label>
+                    <b-form-select
                       placeholder="HR chấm"
-                    />
+                      v-model="dataEmployee.hrMark"
+                      :options="markOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.partMark"
+                    <label class="label">Bộ phận chấm</label>
+                    <b-form-select
                       placeholder="Bộ phận chấm"
-                    />
+                      v-model="dataEmployee.partMark"
+                      :options="markOptions"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.round1"
+                    <label class="label">Vòng 1</label>
+                    <b-form-select
                       placeholder="Vòng 1"
-                    />
+                      v-model="dataEmployee.round1"
+                      :options="round1Options"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.joinRound1"
+                    <label class="label">Tham gia Vòng 1</label>
+                    <b-form-select
                       placeholder="Tham gia Vòng 1"
-                    />
+                      v-model="dataEmployee.joinRound1"
+                      :options="interviewOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.interviewV1"
+                    <label class="label">Kết quả PV V1</label>
+                    <b-form-select
                       placeholder="Kết quả PV V1"
-                    />
+                      v-model="dataEmployee.interviewV1"
+                      :options="markOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Notes</label>
                     <input
                       type="text"
                       v-model="dataEmployee.notes"
@@ -229,31 +249,34 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.round2"
+                    <label class="label">Vòng 2</label>
+                    <b-form-select
                       placeholder="Vòng 2"
-                    />
+                      v-model="dataEmployee.round2"
+                      :options="round2Options"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.joinRound2"
+                    <label class="label">Tham gia Vòng 2</label>
+                    <b-form-select
                       placeholder="Tham gia Vòng 2"
-                    />
+                      v-model="dataEmployee.joinRound2"
+                      :options="interviewOptions"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.interviewV2"
+                    <label class="label">Kết quả PV V2</label>
+                    <b-form-select
                       placeholder="Kết quả PV V2"
-                    />
+                      v-model="dataEmployee.interviewV2"
+                      :options="markOptions"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
@@ -269,26 +292,29 @@
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.offer"
+                    <label class="label">OFFER</label>
+                    <b-form-select
                       placeholder="OFFER"
-                    />
+                      v-model="dataEmployee.offer"
+                      :options="offerOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.offerResult"
+                    <label class="label">Kết quả offer</label>
+                    <b-form-select
                       placeholder="Kết quả offer"
-                    />
+                      v-model="dataEmployee.offerResult"
+                      :options="offerResultOptions"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Notes</label>
                     <input
                       type="text"
                       v-model="dataEmployee.notes2"
@@ -298,17 +324,19 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.goWork"
+                    <label class="label">ĐI LÀM</label>
+                    <b-form-select
                       placeholder="ĐI LÀM"
-                    />
+                      v-model="dataEmployee.goWork"
+                      :options="goWorkOptions"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Ngày đi làm</label>
                     <input
                       type="text"
                       v-model="dataEmployee.onboardDate"
@@ -318,26 +346,29 @@
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
+                    <label class="label">Thời gian thử việc</label>
+                    <b-form-select
+                      placeholder="Thời gian thử việc"
                       v-model="dataEmployee.probationTime"
-                      placeholder="THỬ VIỆC Thời gian"
-                    />
+                      :options="probationTimeOptions"
+                    ></b-form-select>
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
-                    <input
-                      type="text"
-                      v-model="dataEmployee.probationResult"
+                    <label class="label">Kết quả thử việc</label>
+                    <b-form-select
                       placeholder="Kết quả thử việc"
-                    />
+                      v-model="dataEmployee.probationResult"
+                      :options="probationResultOptions"
+                    ></b-form-select>
                   </div>
                 </div>
                 <div class="col-xl-6 col-sm-12 col-12">
                   <div class="form-group">
+                    <label class="label">Note</label>
                     <input
                       type="text"
                       v-model="dataEmployee.notes3"
@@ -440,6 +471,45 @@ export default {
       isShowModalSuccess: false,
       messageNoti: "",
       isAdding: false,
+      markOptions: [
+        { value: "Pass", text: "Pass" },
+        { value: "Fail", text: "Fail" },
+      ],
+      interviewOptions: [
+        { value: "Đến", text: "Đến" },
+        { value: "Không đến", text: "Không đến" },
+      ],
+      round1Options: [
+        { value: "PV Vòng 1", text: "PV Vòng 1" },
+        { value: "Test", text: "Test" },
+      ],
+      round2Options: [
+        { value: "PV Vòng 2", text: "PV Vòng 2" },
+        { value: "Test", text: "Test" },
+      ],
+      offerOptions: [
+        { value: "Đã gọi", text: "Đã gọi" },
+        { value: "Không gọi được", text: "Không gọi được" }
+      ],
+      offerResultOptions: [
+        { value: "Yes", text: "Yes" },
+        { value: "No", text: "No" },
+      ],
+      goWorkOptions: [
+        { value: "Đi làm", text: "Đi làm" },
+        { value: "Từ chối", text: "Từ chối" },
+      ],
+      probationTimeOptions: [
+        { value: "Không thử việc", text: "Không thử việc" },
+        { value: "30 ngày", text: "30 ngày" },
+        { value: "60 ngày", text: "60 ngày" },
+        { value: "Khác", text: "Khác" },
+      ],
+      probationResultOptions: [
+        { value: "Pass", text: "Pass" },
+        { value: "Fail", text: "Fail" },
+        { value: "Nghỉ", text: "Nghỉ" },
+      ],
     };
   },
   methods: {
@@ -464,4 +534,31 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.form-group textarea {
+  padding: 10px;
+
+  &:focus {
+    border: 1px solid #ebecf1 !important;
+  }
+}
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &.text-area-group {
+    align-items: flex-start;
+  }
+
+  input,
+  select {
+    height: 40px;
+  }
+}
+.label {
+  padding-right: 20px;
+  text-align: left;
+  width: 180px;
+}
+</style>
