@@ -24,6 +24,9 @@ import Login from "@/layout/wrappers/loginLayout.vue";
 
 import tracking from "./store/tracking";
 
+import { LoadingPlugin } from "vue-loading-overlay";
+import "vue-loading-overlay/dist/css/index.css";
+
 const app = createApp(App);
 
 const storeApp = createStore(tracking);
@@ -43,5 +46,6 @@ app.use(BootstrapVue3);
 app.use(VueClipboard);
 app.use(router);
 app.use(storeApp);
+app.use(LoadingPlugin);
 
 app.mount("#app");

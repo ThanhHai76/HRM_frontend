@@ -41,14 +41,9 @@
             <div class="card-body">
               <div class="card_widget_header d-flex flex-column">
                 <label>Employees CV</label>
-                <h4 v-if="allEmployees.length > 0">
+                <h4>
                   {{ allEmployees.length }}
                 </h4>
-                <b-spinner
-                  v-else
-                  variant="success"
-                  label="Spinning"
-                ></b-spinner>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash1.png" alt="card-img" />
@@ -61,12 +56,7 @@
             <div class="card-body">
               <div class="card_widget_header d-flex flex-column">
                 <label>Jobs</label>
-                <h4 v-if="allJobs.length > 0">{{ allJobs.length }}</h4>
-                <b-spinner
-                  v-else
-                  variant="success"
-                  label="Spinning"
-                ></b-spinner>
+                <h4>{{ allJobs.length }}</h4>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash2.png" alt="card-img" />
@@ -79,14 +69,9 @@
             <div class="card-body">
               <div class="card_widget_header d-flex flex-column">
                 <label>BP chấm Pass</label>
-                <h4 v-if="partMarkPass.length > 0">
+                <h4>
                   {{ partMarkPass.length }}
                 </h4>
-                <b-spinner
-                  v-else
-                  variant="success"
-                  label="Spinning"
-                ></b-spinner>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash3.png" alt="card-img" />
@@ -99,14 +84,9 @@
             <div class="card-body">
               <div class="card_widget_header d-flex flex-column birth_year">
                 <label>Năm sinh</label>
-                <h4 v-if="allEmployees.length > 0">
+                <h4>
                   {{ minBirth }} - {{ maxBirth }}
                 </h4>
-                <b-spinner
-                  v-else
-                  variant="success"
-                  label="Spinning"
-                ></b-spinner>
               </div>
               <div class="card_widget_img">
                 <img src="@/assets/img/dash4.png" alt="card-img" />
@@ -199,6 +179,11 @@
             </div>
           </div>
         </div>
+
+        <loading v-model:active="isLoading"
+                 :can-cancel="true"
+                 :is-full-page="true"/>
+
       </div>
     </div>
   </div>
@@ -208,11 +193,15 @@
 import { getALLEmployeesCVHome } from "@/services/employee-service";
 import moment from "moment";
 import Chart from "chart.js/auto";
+import Loading from 'vue-loading-overlay';
 
 export default {
   name: "HomePage",
   setup() {
     return {};
+  },
+  components: {
+    Loading,
   },
   data() {
     return {
@@ -234,9 +223,11 @@ export default {
       barChartByType: "YEAR",
       pieChartByType: "PASS",
       yearFilter: "2024",
+      isLoading: false,
     };
   },
   async mounted() {
+    this.isLoading = true;
     const { data } = await getALLEmployeesCVHome();
     this.allEmployees = data;
     await this.analysisData();
@@ -244,6 +235,7 @@ export default {
     this.chartYear();
     this.pieChartForCV();
     this.pieChartForWork();
+    this.isLoading = false;
   },
   computed: {
     employeesCVByYear() {
