@@ -16,16 +16,16 @@
                 <span>Employees CV</span>
               </router-link>
             </li>
+            <li title="Tracking" :class="{ active: path === '/tracking-candidates' }">
+              <router-link to="/tracking-candidates">
+                <img src="@/assets/img/calendar.svg" alt="sidebar_img" />
+                <span>Tracking</span>
+              </router-link>
+            </li>
             <li title="Import Employees CV" :class="{ active: path === '/import-excel-empoyee' }">
               <router-link to="/import-excel-empoyee">
                 <img src="@/assets/img/manage.svg" alt="sidebar_img" />
                 <span>Import Excel</span>
-              </router-link>
-            </li>
-            <li title="Report" :class="{ active: path === '/report' }">
-              <router-link to="/report">
-                <img src="@/assets/img/report.svg" alt="sidebar_img" />
-                <span>Reports</span>
               </router-link>
             </li>
             <li title="List Order Job" :class="{ active: path === '/list-order-job' }">
@@ -34,12 +34,18 @@
                 <span>List Order Job</span>
               </router-link>
             </li>
-            <li title="Tracking" :class="{ active: path === '/tracking-candidates' }">
-              <router-link to="/tracking-candidates">
-                <img src="@/assets/img/calendar.svg" alt="sidebar_img" />
-                <span>Tracking</span>
+            <li title="Report" :class="{ active: path === '/report' }">
+              <router-link to="/report">
+                <img src="@/assets/img/report.svg" alt="sidebar_img" />
+                <span>Reports</span>
               </router-link>
-            </li> 
+            </li>
+             <!-- <li title="Upload Pdf" :class="{ active: path === '/upload-pdf' }">
+              <router-link to="/upload-pdf">
+                <img src="@/assets/img/manage.svg" alt="sidebar_img" />
+                <span>Upload Pdf</span>
+              </router-link>
+            </li> -->
             <!-- <li title="Calendar" :class="{ active: path === '/calendar' }">
               <router-link to="/calendar">
                 <img src="@/assets/img/calendar.svg" alt="sidebar_img" />
@@ -52,13 +58,6 @@
                 <span>Todo List</span>
               </router-link>
             </li>
-            
-            <!-- <li title="Leave" :class="{ active: path === '/leave' }">
-              <router-link to="/leave">
-                <img src="@/assets/img/leave.svg" alt="sidebar_img" />
-                <span>Leave</span>
-              </router-link>
-            </li> -->
           </ul>
         </div>
       </div>

@@ -16,6 +16,7 @@ import ListOrderJobPage from "@/pages/ListOrderJob.vue";
 import TrackingPage from "@/pages/Tracking/Tracking.vue";
 import AddTrackingPage from "@/pages/Tracking/Add-Tracking.vue";
 import EditTrackingPage from "@/pages/Tracking/Edit-Tracking.vue";
+import UploadPdfPage from "@/pages/Upload-Pdf.vue";
 
 import { checkAccessMiddleware } from "./middleware";
       
@@ -127,6 +128,12 @@ const routes = [
     name: "EditTrackingPage", 
     component: EditTrackingPage,
     meta: { isAuth: true, title: 'Edit Tracking Candidates' }
+  },
+  {
+    path: "/upload-pdf",
+    name: "UploadPdfPage", 
+    component: UploadPdfPage,
+    meta: { isAuth: true, title: 'Upload Pdf Page' }
   },
 ];
 
