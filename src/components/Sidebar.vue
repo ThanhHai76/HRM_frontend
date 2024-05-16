@@ -40,12 +40,12 @@
                 <span>Reports</span>
               </router-link>
             </li>
-             <!-- <li title="Upload Pdf" :class="{ active: path === '/upload-pdf' }">
+             <li title="Upload Pdf" :class="{ active: path === '/upload-pdf' }">
               <router-link to="/upload-pdf">
                 <img src="@/assets/img/manage.svg" alt="sidebar_img" />
                 <span>Upload Pdf</span>
               </router-link>
-            </li> -->
+            </li>
             <!-- <li title="Calendar" :class="{ active: path === '/calendar' }">
               <router-link to="/calendar">
                 <img src="@/assets/img/calendar.svg" alt="sidebar_img" />
