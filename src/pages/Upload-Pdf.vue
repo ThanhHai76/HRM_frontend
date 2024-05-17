@@ -49,6 +49,19 @@
                         </h2>
                       </div>
                       <div class="card-body list-pdf-cv">
+                        <div class="top-nav-search mb-4 d-flex align-items-center">
+                          <form>
+                            <input
+                              type="text"
+                              class="form-control"
+                              v-model="searchWord"
+                              placeholder="Search for mobile phone, name, email..."
+                            />
+                            <button class="btn" type="submit">
+                              <i class="fas fa-search"></i>
+                            </button>
+                          </form>
+                        </div>
                         <div class="table-responsive">
                           <table
                             class="table table-bordered custom-table no-footer"
@@ -65,7 +78,7 @@
                             </thead>
                             <tbody>
                               <tr
-                                v-for="(item, index) in dataListPDF"
+                                v-for="(item, index) in listPdfDataFilter"
                                 :key="item._id"
                                 :class="{
                                   'table-active': selectedItem === item._id,
@@ -187,11 +200,6 @@
                               @click="onSubmitFormUploadPDF"
                               class="btn btn-apply"
                             >
-                              <b-spinner
-                                v-if="isLoadingForm"
-                                variant="success"
-                                label="Spinning"
-                              ></b-spinner>
                               {{
                                 isModeEdit
                                   ? "Update upload pdf"
@@ -312,10 +320,7 @@
       </div>
     </b-modal>
 
-    <loading
-      v-model:active="isLoadingForm"
-      :is-full-page="true"
-    />
+    <loading v-model:active="isLoadingPage" :is-full-page="true" />
   </div>
 </template>
 
@@ -344,7 +349,6 @@ export default {
       isShowModalSuccess: false,
       loadingUpload: false,
       dataListPDF: [],
-      isLoading: false,
       linkPDFUpload: "",
       tabActive: "list",
       formCreate: {
@@ -355,23 +359,36 @@ export default {
         filename: "",
         linkCVPDF: "",
       },
-      isLoadingForm: false,
+      isLoadingPage: false,
       isShowModalNotify: false,
       messageNoti: "",
       isShowModalDelete: false,
       isModeEdit: false,
+      searchWord: ""
     };
   },
   mounted() {
     this.fetchAllPdfs();
   },
-  computed: {},
+  computed: {
+    listPdfDataFilter() {
+      const trimWord = this.searchWord.toUpperCase().trim();
+      return this.dataListPDF.filter(
+        ({
+          name,
+          phone,
+          email
+        }) =>
+          (name || "").toUpperCase().includes(trimWord) ||
+          (phone || "").toUpperCase().includes(trimWord) ||
+          (email || "").toUpperCase().includes(trimWord)
+      );
+    },
+  },
   methods: {
     async fetchAllPdfs() {
-      this.isLoading = true;
       const { data } = await getAllPDFs();
       this.dataListPDF = data;
-      this.isLoading = false;
     },
     onFileChange(event) {
       this.fileImported = this.takeFile(event);
@@ -405,7 +422,7 @@ export default {
         if (status === 200) {
           this.formCreate.linkCVPDF = data.data;
           this.isShowModalNotify = true;
-          this.messageNoti = "Thank You! ✔ File Succesfully Uploaded.";
+          this.messageNoti = "File Succesfully Uploaded.";
         }
         this.loadingUpload = false;
       }
@@ -433,7 +450,7 @@ export default {
           : "Please enter info";
         return;
       }
-      this.isLoadingForm = true;
+      this.isLoadingPage = true;
       const { status } = this.isModeEdit
         ? await updatePDF(this.selectedItem, this.formCreate)
         : await createPDF(this.formCreate);
@@ -443,7 +460,7 @@ export default {
           ? "Update PDF CV successfully"
           : "Add a PDF CV successfully";
       }
-      this.isLoadingForm = false;
+      this.isLoadingPage = false;
     },
     selectItemToShow(item) {
       this.linkPDFUpload = item.linkCVPDF;
@@ -451,7 +468,6 @@ export default {
       this.changeTab("list");
     },
     confirmUploadSuccess() {
-      this.clearForm();
       this.changeTab("list");
     },
     onDeletePdf(item) {
@@ -459,6 +475,7 @@ export default {
       this.selectedItem = item._id;
     },
     async confirmDeletePdf() {
+      this.isLoadingPage = true;
       const status = await deletePDF(this.selectedItem);
       await this.fetchAllPdfs();
       this.isShowModalDelete = false;
@@ -466,6 +483,7 @@ export default {
         this.isShowModalNotify = true;
         this.messageNoti = "Deleted successfully";
       }
+      this.isLoadingPage = false;
     },
     onEditPdf(item) {
       this.isModeEdit = true;
@@ -481,6 +499,7 @@ export default {
     },
     clearForm() {
       this.isModeEdit = false;
+      this.fileImported = null;
       this.formCreate = {
         name: "",
         phone: "",
@@ -526,7 +545,8 @@ export default {
 }
 
 .table-responsive {
-  min-height: 500px;
+  height: 500px !important;
+  overflow: auto;
   height: 100%;
 }
 
@@ -539,10 +559,15 @@ export default {
 }
 
 .list-pdf-cv {
-  min-height: 600px;
+  height: 600px;
 }
 
 .pdf-view {
   height: 600px;
+}
+
+.top-nav-search {
+  width: 60%;
+  margin-left: 0;
 }
 </style>

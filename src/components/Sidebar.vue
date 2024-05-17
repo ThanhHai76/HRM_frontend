@@ -22,12 +22,12 @@
                 <span>Tracking</span>
               </router-link>
             </li>
-            <li title="Import Employees CV" :class="{ active: path === '/import-excel-empoyee' }">
+            <!-- <li title="Import Employees CV" :class="{ active: path === '/import-excel-empoyee' }">
               <router-link to="/import-excel-empoyee">
                 <img src="@/assets/img/manage.svg" alt="sidebar_img" />
                 <span>Import Excel</span>
               </router-link>
-            </li>
+            </li> -->
             <li title="List Order Job" :class="{ active: path === '/list-order-job' }">
               <router-link to="/list-order-job">
                 <img src="@/assets/img/company.svg" alt="sidebar_img" />
