@@ -181,7 +181,6 @@
         </div>
 
         <loading v-model:active="isLoading"
-                 :can-cancel="true"
                  :is-full-page="true"/>
 
       </div>

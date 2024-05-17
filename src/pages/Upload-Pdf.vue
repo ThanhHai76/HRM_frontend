@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <div class="content container-fluid">
       <div class="row">
-        <div class="col-xl-12 col-sm-12 col-12">
+        <!-- <div class="col-xl-12 col-sm-12 col-12">
           <div class="breadcrumb-path mb-4">
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
@@ -18,7 +18,7 @@
             </ul>
             <h3>Upload PDF</h3>
           </div>
-        </div>
+        </div> -->
         <div class="col-xl-12 col-sm-12 col-12">
           <div class="card">
             <div class="card-header">
@@ -48,7 +48,7 @@
                           Information about PDF CV of Employee
                         </h2>
                       </div>
-                      <div class="card-body" style="min-height: 385px">
+                      <div class="card-body list-pdf-cv">
                         <div class="table-responsive">
                           <table
                             class="table table-bordered custom-table no-footer"
@@ -117,15 +117,14 @@
                   <div class="col-xl-6 col-sm-12 col-12">
                     <div class="card">
                       <div class="card-header">
-                        <h2 class="card-titles mb-2">
-                          PDF CV Viewer
-                        </h2>
+                        <h2 class="card-titles mb-2">PDF CV Viewer</h2>
                       </div>
-                      <div class="card-body">
-                        <vue-pdf-app
-                          style="min-height: 400px"
-                          :pdf="linkPDFUpload"
-                        ></vue-pdf-app>
+                      <div class="card-body pdf-view">
+                        <PDF
+                          :src="linkPDFUpload"
+                          :show-page-tooltip="true"
+                          :show-progress="true"
+                        />
                       </div>
                     </div>
                   </div>
@@ -315,7 +314,6 @@
 
     <loading
       v-model:active="isLoadingForm"
-      :can-cancel="true"
       :is-full-page="true"
     />
   </div>
@@ -329,15 +327,15 @@ import {
   updatePDF,
   uploadFilePDF,
 } from "@/services/pdf-service";
-import VuePdfApp from "vue3-pdf-app";
 import Loading from "vue-loading-overlay";
 import moment from "moment";
+import PDF from "pdf-vue3";
 
 export default {
   name: "UploadPdf",
   components: {
-    VuePdfApp,
     Loading,
+    PDF,
   },
   data() {
     return {
@@ -367,6 +365,7 @@ export default {
   mounted() {
     this.fetchAllPdfs();
   },
+  computed: {},
   methods: {
     async fetchAllPdfs() {
       this.isLoading = true;
@@ -527,10 +526,23 @@ export default {
 }
 
 .table-responsive {
-  min-height: 385px;
+  min-height: 500px;
+  height: 100%;
 }
 
 .nav-link {
   color: inherit !important;
+}
+
+.card {
+  margin-bottom: 0;
+}
+
+.list-pdf-cv {
+  min-height: 600px;
+}
+
+.pdf-view {
+  height: 600px;
 }
 </style>
