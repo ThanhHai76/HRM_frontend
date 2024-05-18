@@ -49,7 +49,9 @@
                         </h2>
                       </div>
                       <div class="card-body list-pdf-cv">
-                        <div class="top-nav-search mb-4 d-flex align-items-center">
+                        <div
+                          class="top-nav-search mb-4 d-flex align-items-center"
+                        >
                           <form>
                             <input
                               type="text"
@@ -62,7 +64,7 @@
                             </button>
                           </form>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive" v-show="isReloadTable">
                           <table
                             class="table table-bordered custom-table no-footer"
                           >
@@ -104,8 +106,48 @@
                                       <li>
                                         <a
                                           class="dropdown-item"
+                                          @click.prevent.stop="
+                                            onCopy(item.linkCVPDF)
+                                          "
+                                        >
+                                          <span class="mr-2">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="16"
+                                              height="16"
+                                              fill="currentColor"
+                                              class="bi bi-copy"
+                                              viewBox="0 0 16 16"
+                                            >
+                                              <path
+                                                fill-rule="evenodd"
+                                                d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                                              />
+                                            </svg>
+                                          </span>
+                                          <span>Copy Link</span>
+                                        </a>
+                                      </li>
+                                      <li>
+                                        <a
+                                          class="dropdown-item"
                                           @click.prevent.stop="onEditPdf(item)"
-                                          >Edit</a
+                                        >
+                                          <span class="mr-2">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="16"
+                                              height="16"
+                                              fill="currentColor"
+                                              class="bi bi-pencil"
+                                              viewBox="0 0 16 16"
+                                            >
+                                              <path
+                                                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                              />
+                                            </svg>
+                                          </span>
+                                          <span>Edit</span></a
                                         >
                                       </li>
                                       <li>
@@ -114,7 +156,25 @@
                                           @click.prevent.stop="
                                             onDeletePdf(item)
                                           "
-                                          >Delete</a
+                                        >
+                                          <span class="mr-2">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="16"
+                                              height="16"
+                                              fill="currentColor"
+                                              class="bi bi-trash"
+                                              viewBox="0 0 16 16"
+                                            >
+                                              <path
+                                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
+                                              />
+                                              <path
+                                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                                              />
+                                            </svg>
+                                          </span>
+                                          <span>Delete</span></a
                                         >
                                       </li>
                                     </ul>
@@ -133,11 +193,16 @@
                         <h2 class="card-titles mb-2">PDF CV Viewer</h2>
                       </div>
                       <div class="card-body pdf-view">
-                        <PDF
+                        <!-- <PDF
                           :src="linkPDFUpload"
                           :show-page-tooltip="true"
                           :show-progress="true"
-                        />
+                        /> -->
+                        <iframe
+                          :src="linkPDFUpload"
+                          title="PDF CV Viewer"
+                          :allowfullscreen="true"
+                        ></iframe>
                       </div>
                     </div>
                   </div>
@@ -334,13 +399,13 @@ import {
 } from "@/services/pdf-service";
 import Loading from "vue-loading-overlay";
 import moment from "moment";
-import PDF from "pdf-vue3";
+// import PDF from "pdf-vue3";
 
 export default {
   name: "UploadPdf",
   components: {
     Loading,
-    PDF,
+    // PDF,
   },
   data() {
     return {
@@ -364,21 +429,21 @@ export default {
       messageNoti: "",
       isShowModalDelete: false,
       isModeEdit: false,
-      searchWord: ""
+      searchWord: "",
+      isReloadTable: true,
     };
   },
-  mounted() {
-    this.fetchAllPdfs();
+  async mounted() {
+    this.isLoadingPage = true;
+    await this.fetchAllPdfs();
+    this.changeTab("list");
+    this.isLoadingPage = false;
   },
   computed: {
     listPdfDataFilter() {
       const trimWord = this.searchWord.toUpperCase().trim();
       return this.dataListPDF.filter(
-        ({
-          name,
-          phone,
-          email
-        }) =>
+        ({ name, phone, email }) =>
           (name || "").toUpperCase().includes(trimWord) ||
           (phone || "").toUpperCase().includes(trimWord) ||
           (email || "").toUpperCase().includes(trimWord)
@@ -431,6 +496,12 @@ export default {
       this.tabActive = tab;
       if (tab === "list") {
         this.fetchAllPdfs();
+        if (this.dataListPDF.length > 0) {
+          this.isReloadTable = false;
+          this.linkPDFUpload = this.dataListPDF[0].linkCVPDF;
+          this.selectedItem = this.dataListPDF[0]._id;
+          this.isReloadTable = true;
+        }
         this.clearForm();
       }
     },
@@ -463,9 +534,10 @@ export default {
       this.isLoadingPage = false;
     },
     selectItemToShow(item) {
-      this.linkPDFUpload = item.linkCVPDF;
       this.selectedItem = item._id;
-      this.changeTab("list");
+      this.linkPDFUpload = item.linkCVPDF;
+      this.isReloadTable = false;
+      this.isReloadTable = true;
     },
     confirmUploadSuccess() {
       this.changeTab("list");
@@ -508,6 +580,11 @@ export default {
         filename: "",
         linkCVPDF: "",
       };
+    },
+    onCopy(message) {
+      this.$copyText(message).then(function () {
+        alert("Copied");
+      });
     },
   },
 };
@@ -558,6 +635,13 @@ export default {
   margin-bottom: 0;
 }
 
+.card {
+  .card-header,
+  .card-body {
+    padding: 20px;
+  }
+}
+
 .list-pdf-cv {
   height: 600px;
 }
@@ -569,5 +653,9 @@ export default {
 .top-nav-search {
   width: 60%;
   margin-left: 0;
+}
+iframe {
+  width: 100%;
+  height: 100%;
 }
 </style>

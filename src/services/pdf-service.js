@@ -1,4 +1,5 @@
 import HTTP from "@/services/api-service.js";
+import HTTP_PDF from "@/services/api-pdf-service.js";
 
 async function getAllPDFs() {
   const { data } = await HTTP.get("/pdf/all-pdfs");
@@ -33,7 +34,7 @@ async function uploadFilePDF(file) {
       "Content-Type": "multipart/form-data",
     },
   };
-  const { data, status } = await HTTP.post(
+  const { data, status } = await HTTP_PDF.post(
     "/pdf/upload_pdf",
     formData,
     options
