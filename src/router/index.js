@@ -17,6 +17,7 @@ import TrackingPage from "@/pages/Tracking/Tracking.vue";
 import AddTrackingPage from "@/pages/Tracking/Add-Tracking.vue";
 import EditTrackingPage from "@/pages/Tracking/Edit-Tracking.vue";
 import UploadPdfPage from "@/pages/Upload-Pdf.vue";
+import SendMailPage from "@/pages/SendMail.vue";
 
 import { checkAccessMiddleware } from "./middleware";
       
@@ -134,6 +135,12 @@ const routes = [
     name: "UploadPdfPage", 
     component: UploadPdfPage,
     meta: { isAuth: true, title: 'Upload Pdf Page' }
+  },
+  {
+    path: "/send-mail",
+    name: "SendMailPage",  
+    component: SendMailPage,
+    meta: { isAuth: true, title: 'Send Mail Page' }
   },
 ];
 

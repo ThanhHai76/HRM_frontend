@@ -431,6 +431,7 @@ export default {
       isModeEdit: false,
       searchWord: "",
       isReloadTable: true,
+      selectedItem: ""
     };
   },
   async mounted() {
@@ -492,10 +493,10 @@ export default {
         this.loadingUpload = false;
       }
     },
-    changeTab(tab) {
+    async changeTab(tab) {
       this.tabActive = tab;
       if (tab === "list") {
-        this.fetchAllPdfs();
+        await this.fetchAllPdfs();
         if (this.dataListPDF.length > 0) {
           this.isReloadTable = false;
           this.linkPDFUpload = this.dataListPDF[0].linkCVPDF;
