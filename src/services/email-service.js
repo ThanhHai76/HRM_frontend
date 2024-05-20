@@ -10,6 +10,11 @@ async function createTemplateEmail(Email) {
   return { data, status };
 }
 
+async function sendEmail(Email) {
+  const { data, status } = await HTTP.post("/email/send-email", Email);
+  return { data, status };
+}
+
 async function getTemplateEmail(id) {
   const { data } = await HTTP.get(`/email/get-email/${id}`);
   return data;
@@ -28,6 +33,7 @@ async function deleteTemplateEmail(id) {
 export {
   getAllTemplateEmails,
   createTemplateEmail,
+  sendEmail,
   getTemplateEmail,
   updateTemplateEmail,
   deleteTemplateEmail,

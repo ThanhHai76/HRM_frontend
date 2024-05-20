@@ -148,11 +148,47 @@
                         ></b-form-input>
                       </b-form-group>
 
-                      <b-form-group id="input-group-1" label="Email">
+                      <b-form-group id="input-group-2" label="Email">
                         <b-form-input
-                          id="input-1"
+                          id="input-2"
                           v-model="mailForm.email"
-                          placeholder="Nhập Email người nhận"
+                          placeholder="Nhập Email người nhận (,)"
+                          required
+                        ></b-form-input>
+                      </b-form-group>
+
+                      <div class="d-flex justify-content-start ml-4">
+                        <b-form-checkbox
+                          v-model="checkSwitch.cc"
+                          switch
+                          size="lg"
+                          >Cc</b-form-checkbox
+                        >
+                      </div>
+
+                      <b-form-group v-if="checkSwitch.cc" id="input-group-3">
+                        <b-form-input
+                          id="input-3"
+                          v-model="mailForm.cc"
+                          placeholder="Nhập Email Cc (,)"
+                          required
+                        ></b-form-input>
+                      </b-form-group>
+
+                      <div class="d-flex justify-content-start ml-4">
+                        <b-form-checkbox
+                          v-model="checkSwitch.bcc"
+                          switch
+                          size="lg"
+                          >Bcc</b-form-checkbox
+                        >
+                      </div>
+
+                      <b-form-group v-if="checkSwitch.bcc" id="input-group-4">
+                        <b-form-input
+                          id="input-4"
+                          v-model="mailForm.bcc"
+                          placeholder="Nhập Email Bcc (,)"
                           required
                         ></b-form-input>
                       </b-form-group>
@@ -193,6 +229,29 @@
                         Update Template</a
                       >
                     </div>
+                    <div class="form-btn">
+                      <div
+                        class="btn btn-outline-info"
+                        v-if="selectedItem.email"
+                        @click="onSendTemplateEmail"
+                      >
+                        Send Email
+                        <span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="32"
+                            fill="currentColor"
+                            class="bi bi-send"
+                            viewBox="0 0 16 16"
+                          >
+                            <path
+                              d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -227,6 +286,19 @@
       </div>
     </b-modal>
 
+    <b-modal
+      id="modal-send-email"
+      centered
+      title="Confirm send email"
+      v-model="isShowModalSendEmail"
+      @ok="sendEmail"
+      ok-title="Confirm"
+    >
+      <div>
+        <p>Confirm to send this Email to {{ mailForm.email }}</p>
+      </div>
+    </b-modal>
+
     <loading v-model:active="isLoadingPage" :is-full-page="true" />
   </div>
 </template>
@@ -235,8 +307,9 @@
 import {
   getAllTemplateEmails,
   createTemplateEmail,
+  sendEmail,
   updateTemplateEmail,
-  deleteTemplateEmail
+  deleteTemplateEmail,
 } from "@/services/email-service";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -319,6 +392,8 @@ export default {
       mailForm: {
         subject: "",
         email: "",
+        cc: "",
+        bcc: "",
         content: "",
       },
       listTemplateEmail: [],
@@ -331,10 +406,33 @@ export default {
       selectedItem: {
         subject: "",
         email: "",
+        cc: "",
+        bcc: "",
         content: "",
       },
       isLoadingPage: false,
+      isShowModalSendEmail: false,
+      checkSwitch: {
+        cc: false,
+        bcc: false,
+      },
     };
+  },
+  watch: {
+    "checkSwitch.cc"() {
+      if (!this.checkSwitch.cc) this.mailForm.cc = "";
+    },
+    "checkSwitch.bcc"() {
+      if (!this.checkSwitch.bcc) this.mailForm.bcc = "";
+    },
+    "selectedItem.cc"() {
+      if (this.selectedItem.cc) this.checkSwitch.cc = true;
+      else this.checkSwitch.cc = false;
+    },
+    "selectedItem.bcc"() {
+      if (this.selectedItem.bcc) this.checkSwitch.bcc = true;
+      else this.checkSwitch.bcc = false;
+    }
   },
   async mounted() {
     this.isLoadingPage = true;
@@ -360,18 +458,26 @@ export default {
     onTextChange() {},
     onEditorChange() {},
     onContentUpdate() {},
-    getHTMLContent() {
+    getHTMLContent(sendMail = false) {
       // Access the VueQuill component instance using the ref
       const quillInstance = this.$refs.quillEditor;
 
       // Do something with the HTML content
-      this.mailForm.content = quillInstance.getHTML();
+      const htmlContent = quillInstance.getHTML();
+      this.mailForm.content = sendMail
+        ? htmlContent.replaceAll(
+            'class="ql-align-center">',
+            'style="text-align:center;">'
+          )
+        : htmlContent;
     },
     selectItemToShow(item) {
       this.selectedItem = item;
       this.mailForm = {
         subject: this.selectedItem.subject,
         email: this.selectedItem.email,
+        cc: this.selectedItem.cc || "",
+        bcc: this.selectedItem.bcc || "",
         content: this.selectedItem.content,
       };
       const quillInstance = this.$refs.quillEditor;
@@ -382,12 +488,12 @@ export default {
       if (!this.checkFillForm()) return;
       this.loadingCreate = true;
       const { status } = await createTemplateEmail(this.mailForm);
+      await this.fetchAllTemplateEmails();
+      this.loadingCreate = false;
       if (status === 200) {
         this.isShowModalNotify = true;
         this.messageNoti = "Create A Email Template Successfully !";
       }
-      await this.fetchAllTemplateEmails();
-      this.loadingCreate = false;
     },
     async updateTemplateEmail() {
       this.getHTMLContent();
@@ -397,12 +503,12 @@ export default {
         this.selectedItem._id,
         this.mailForm
       );
+      await this.fetchAllTemplateEmails();
+      this.loadingUpdate = false;
       if (status === 200) {
         this.isShowModalNotify = true;
         this.messageNoti = "Update This Template Email Successfully !";
       }
-      await this.fetchAllTemplateEmails();
-      this.loadingUpdate = false;
     },
     checkFillForm() {
       if (
@@ -435,6 +541,21 @@ export default {
         this.messageNoti = "Deleted successfully";
       }
       this.isLoadingPage = false;
+    },
+    onSendTemplateEmail() {
+      this.isShowModalSendEmail = true;
+    },
+    async sendEmail() {
+      this.getHTMLContent({ sendMail: true });
+      if (!this.checkFillForm()) return;
+      this.isLoadingPage = true;
+      const { status } = await sendEmail(this.mailForm);
+      await this.fetchAllTemplateEmails();
+      this.isLoadingPage = false;
+      if (status === 200) {
+        this.isShowModalNotify = true;
+        this.messageNoti = `Sent A Email to ${this.mailForm.email} Successfully !`;
+      }
     },
   },
 };
