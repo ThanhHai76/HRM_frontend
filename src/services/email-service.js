@@ -1,4 +1,5 @@
 import HTTP from "@/services/api-service.js";
+import HTTP_PDF from "@/services/api-pdf-service.js";
 
 async function getAllTemplateEmails() {
   const { data } = await HTTP.get("/email/all-emails");
@@ -11,8 +12,8 @@ async function createTemplateEmail(Email) {
 }
 
 async function sendEmail(Email) {
-  const { data, status } = await HTTP.post("/email/send-email", Email);
-  return { data, status };
+  const { status } = await HTTP.post("/email/send-email", Email);
+  return { status };
 }
 
 async function getTemplateEmail(id) {
@@ -30,6 +31,22 @@ async function deleteTemplateEmail(id) {
   return status;
 }
 
+async function uploadImage(file) {
+  const formData = new FormData();
+  formData.append("imageFile", file);
+  const options = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+  const res = await HTTP_PDF.post(
+    "/image/upload_image",
+    formData,
+    options
+  );
+  return res;
+}
+
 export {
   getAllTemplateEmails,
   createTemplateEmail,
@@ -37,4 +54,5 @@ export {
   getTemplateEmail,
   updateTemplateEmail,
   deleteTemplateEmail,
+  uploadImage,
 };

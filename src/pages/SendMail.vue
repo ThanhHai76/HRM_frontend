@@ -199,12 +199,14 @@
                       id="editor"
                       ref="quillEditor"
                       :toolbar="toolbarSettings"
+                      :modules="modules"
                       :options="editorOption"
                       theme="snow"
                       v-model="editorContent"
                       @update:content="onContentUpdate"
                       @textChange="onTextChange"
                       @editorChange="onEditorChange"
+                      @image-added="handleImageAdded"
                     >
                     </QuillEditor>
                     <div class="form-btn mt-4 mb-4">
@@ -310,9 +312,11 @@ import {
   sendEmail,
   updateTemplateEmail,
   deleteTemplateEmail,
+  uploadImage,
 } from "@/services/email-service";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
+import ImageUploader from "quill-image-uploader";
 
 const toolbarSettings = {
   container: [
@@ -332,12 +336,12 @@ const toolbarSettings = {
     [{ color: [] }, { background: [] }], // dropdown with defaults from theme
     [{ font: [] }],
     [{ align: [] }],
+    ["link", "image"],
 
     ["clean"], // remove formatting button
   ],
   handlers: {
     placeholder: function (value) {
-      console.log(this.quill);
       if (value) {
         const cursorPosition = this.quill.getSelection().index;
         this.quill.insertText(cursorPosition, value);
@@ -366,7 +370,7 @@ const editorOption = {
       [{ color: [] }, { background: [] }],
       [{ align: [] }],
       ["clean"],
-      ["link", "image", "video"],
+      ["link", "image"],
     ],
     imageResize: {
       displayStyles: {
@@ -383,6 +387,27 @@ export default {
   name: "SendMail",
   components: {
     QuillEditor,
+  },
+  setup: () => {
+    const modules = {
+      name: "imageUploader",
+      module: ImageUploader,
+      options: {
+        upload: (file) => {
+          return new Promise((resolve, reject) => {
+            uploadImage(file)
+              .then((res) => {
+                resolve(res.data.data);
+              })
+              .catch((err) => {
+                reject("Upload failed");
+                console.error("Error:", err);
+              });
+          });
+        },
+      },
+    };
+    return { modules };
   },
   data() {
     return {
@@ -416,6 +441,7 @@ export default {
         cc: false,
         bcc: false,
       },
+      linkImage: "",
     };
   },
   watch: {
@@ -432,7 +458,7 @@ export default {
     "selectedItem.bcc"() {
       if (this.selectedItem.bcc) this.checkSwitch.bcc = true;
       else this.checkSwitch.bcc = false;
-    }
+    },
   },
   async mounted() {
     this.isLoadingPage = true;
@@ -464,12 +490,11 @@ export default {
 
       // Do something with the HTML content
       const htmlContent = quillInstance.getHTML();
-      this.mailForm.content = sendMail
-        ? htmlContent.replaceAll(
-            'class="ql-align-center">',
-            'style="text-align:center;">'
-          )
-        : htmlContent;
+      const sanitizedContent = htmlContent
+        .replaceAll('class="ql-align-left">', 'style="text-align:left;">')
+        .replaceAll('class="ql-align-center">', 'style="text-align:center;">')
+        .replaceAll('class="ql-align-right">', 'style="text-align:right;">');
+      this.mailForm.content = sendMail ? sanitizedContent : htmlContent;
     },
     selectItemToShow(item) {
       this.selectedItem = item;
@@ -556,6 +581,11 @@ export default {
         this.isShowModalNotify = true;
         this.messageNoti = `Sent A Email to ${this.mailForm.email} Successfully !`;
       }
+    },
+    handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+      // Add the image to the editor
+      Editor.insertEmbed(cursorLocation, 'image', file);
+      resetUploader();
     },
   },
 };
