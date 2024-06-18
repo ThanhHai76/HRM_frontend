@@ -317,6 +317,7 @@ import {
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import ImageUploader from "quill-image-uploader";
+import Loading from 'vue-loading-overlay';
 
 const toolbarSettings = {
   container: [
@@ -387,6 +388,7 @@ export default {
   name: "SendMail",
   components: {
     QuillEditor,
+    Loading,
   },
   setup: () => {
     const modules = {
