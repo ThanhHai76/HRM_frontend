@@ -65,7 +65,7 @@ const routes = [
     meta: { isAuth: true, title: 'Detail Employee' }
   },
   {
-    path: "/import-excel-empoyee",
+    path: "/import-excel-employee",
     name: "ImportExcelEmployee",
     component: ImportExcelEmployee,
     meta: { isAuth: true, title: 'Import Excel Employee' }

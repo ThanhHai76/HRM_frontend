@@ -317,6 +317,7 @@ import {
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import ImageUploader from "quill-image-uploader";
+// import { ImageResize } from 'quill-image-resize-module';
 import Loading from 'vue-loading-overlay';
 
 const toolbarSettings = {
@@ -585,9 +586,11 @@ export default {
       }
     },
     handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+      this.isLoadingPage = true;
       // Add the image to the editor
       Editor.insertEmbed(cursorLocation, 'image', file);
       resetUploader();
+      this.isLoadingPage = false;
     },
   },
 };

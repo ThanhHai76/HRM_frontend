@@ -481,7 +481,7 @@ export default {
       this.$router.push("/add-employee");
     },
     importExcel() {
-      this.$router.push("/import-excel-empoyee");
+      this.$router.push("/import-excel-employee");
     },
     async fetchAllEmployees() {
       this.isLoading = true;
