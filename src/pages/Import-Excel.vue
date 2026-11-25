@@ -1,143 +1,105 @@
 <template>
   <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="row">
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="breadcrumb-path mb-4">
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a @click="$router.push('/')"
-                  ><img
-                    src="@/assets/img/dash.png"
-                    class="mr-2"
-                    alt="breadcrumb"
-                  />Home</a
-                >
-              </li>
-              <li class="breadcrumb-item active">Import Excel</li>
-            </ul>
-            <h3>Import Excel</h3>
+    <div class="ui-page">
+      <div class="ui-page-head">
+        <div>
+          <h2>Nhập ứng viên từ Excel</h2>
+          <p>Tải file <b>.xlsx</b> (tab đầu tiên) để thêm hàng loạt vào Employees CV.</p>
+        </div>
+        <button class="btn btn-outline-secondary" @click="$router.push('/employee')"><i class="fas fa-arrow-left me-1"></i> Về danh sách</button>
+      </div>
+
+      <div class="ui-grid-2" style="grid-template-columns: 1.2fr 1fr">
+        <div>
+          <div class="ui-card">
+            <h5><i class="fas fa-cloud-upload-alt"></i> Chọn file</h5>
+            <label
+              class="ui-dropzone d-block"
+              :class="{ drag: isEnter }"
+              @dragover.prevent="isEnter = true"
+              @dragleave.prevent="isEnter = false"
+              @drop.prevent="dropFile"
+            >
+              <i class="fas fa-file-excel" style="color: #059669"></i>
+              <div class="name">{{ fileImported ? fileImported.name : "Kéo thả hoặc bấm để chọn file Excel" }}</div>
+              <small>Chỉ hỗ trợ .xlsx, tối đa 20 MB</small>
+              <input type="file" ref="file_upload" name="excelFile" accept=".xlsx" hidden @change="onFileChange" />
+            </label>
+
+            <div v-if="error" class="ui-notice error mt-3 mb-0"><i class="fas fa-exclamation-triangle"></i><div>{{ error }}</div></div>
+            <div v-if="done" class="ui-notice info mt-3 mb-0">
+              <i class="fas fa-check-circle"></i>
+              <div>Đã nhập xong. <router-link to="/employee">Xem danh sách ứng viên →</router-link></div>
+            </div>
+
+            <button class="btn btn-primary mt-3 w-100" :disabled="!fileImported || loadingUpload" @click="onSubmitImportExcel">
+              <span v-if="loadingUpload" class="ui-spin me-2"></span>
+              <i v-else class="fas fa-upload me-2"></i>
+              {{ loadingUpload ? "Đang nhập…" : "Nhập vào hệ thống" }}
+            </button>
+          </div>
+
+          <div class="ui-notice info">
+            <i class="fas fa-sync-alt"></i>
+            <div>Dữ liệu nằm sẵn trên Google Sheet? Dùng <router-link to="/sync/google-sheet">Đồng bộ Google Sheet</router-link> để cập nhật tự động, không cần tải file thủ công.</div>
           </div>
         </div>
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="row justify-content-center">
-            <div class="col-xl-8 col-sm-12 col-12">
-              <div class="card">
-                <div class="card-header">
-                  <h2 class="card-titles mb-2">Import Excel to Employee CV</h2>
-                  <div>(Only Kho CV Sheet)</div>
-                </div>
-                <div class="card-body">
-                  <div class="import-excel">
-                    <div
-                      class="import-excel__drop d-flex align-items-center justify-content-center"
-                    >
-                      <h5 class="mb-4">
-                        Choose File or Drag and drop to upload file
-                      </h5>
-                      <input
-                        type="file"
-                        class="import-excel__drop__file form-control"
-                        ref="file_upload"
-                        name="excelFile"
-                        accept=".xlsx, .xls, .csv"
-                        @dragend="dragEnter"
-                        @dragleave="dragLeave"
-                        @change="onFileChange"
-                      />
-                    </div>
-                  </div>
-                  <div class="form-btn">
-                    <a @click="onSubmitImportExcel" class="btn btn-apply">
-                      <b-spinner
-                        v-if="loadingUpload"
-                        variant="success"
-                        label="Spinning"
-                      ></b-spinner>
-                      Upload Excel</a
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
+        <div class="ui-card">
+          <h5><i class="fas fa-columns"></i> Tiêu đề cột được nhận diện</h5>
+          <p class="text-muted small">Dòng đầu tiên của file phải là tiêu đề. Cột không có trong danh sách sẽ bị bỏ qua.</p>
+          <span v-for="c in columns" :key="c" class="ui-chip">{{ c }}</span>
+          <p class="text-muted small mt-2 mb-0">Dòng không có Nguồn và SĐT sẽ bị bỏ qua. Nhập từ Excel luôn <b>thêm mới</b>; muốn cập nhật ứng viên có sẵn, hãy dùng đồng bộ Google Sheet.</p>
         </div>
       </div>
     </div>
-
-    <b-modal
-      id="modal-success"
-      centered
-      title="Notify"
-      v-model="isShowModalSuccess"
-      ok-title="Confirm"
-    >
-      <div>
-        <p class="text-success">{{ uploadSucessMessage }}</p>
-      </div>
-    </b-modal>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import { uploadExcelEmployee } from "@/services/employee-service";
 
-export default {
-  name: "ImportExcel",
-  data() {
-    return {
-      isEnter: false,
-      fileImported: null,
-      uploadSucessMessage: "",
-      isShowModalSuccess: false,
-      loadingUpload: false,
-    };
-  },
-  methods: {
-    onFileChange(event) {
-      this.fileImported = this.takeFile(event);
-    },
-    takeFile({ target = {}, dataTransfer = {} }) {
-      const files = target.files || dataTransfer.files;
-      if (files.length > 0) {
-        return files[0];
-      }
-      return null;
-    },
-    dragEnter() {
-      this.isEnter = true;
-    },
-    dragLeave() {
-      this.isEnter = false;
-    },
-    dropFile(event) {
-      this.isEnter = false;
-      this.onFileChange(event);
-    },
-    async onSubmitImportExcel() {
-      if (this.fileImported) {
-        this.loadingUpload = true;
-        const { status } = await uploadExcelEmployee(this.fileImported);
-        if (status === 201) {
-          this.isShowModalSuccess = true;
-          this.uploadSucessMessage = "Thank You! ✔ File Succesfully Uploaded.";
-        }
-        this.loadingUpload = false;
-      }
-    },
-  },
-};
-</script>
+const columns = [
+  "Nguồn", "Ngày về/nhập CV", "Job", "Họ và tên", "Năm sinh", "Trình độ học vấn", "Chuyên ngành", "SĐT",
+  "Địa chỉ mail", "Link CV", "Link SP", "Link FB", "Đơn vị UV từng làm", "HR suggesst", "HR chấm", "Bộ phận chấm",
+  "Vòng 1", "Tham gia Vòng 1", "Kết quả PV V1", "VÒNG 2", "Tham gia Vòng 2", "Kết qủa PV V2", "Notes", "OFFER",
+  "Kết quả offer", "ĐI LÀM", "Ngày đi làm", "THỬ VIỆC Thời gian", "Kết quả thử việc", "Note",
+];
 
-<style scoped lang="scss">
-.import-excel {
-  &__drop {
-    height: 200px;
-    flex-direction: column;
+const isEnter = ref(false);
+const fileImported = ref(null);
+const loadingUpload = ref(false);
+const error = ref("");
+const done = ref(false);
 
-    &__file {
-      width: 50%;
-    }
+function setFile(file) {
+  error.value = "";
+  done.value = false;
+  if (file && !/\.xlsx$/i.test(file.name)) {
+    error.value = "Chỉ hỗ trợ file .xlsx.";
+    return;
   }
+  fileImported.value = file || null;
 }
-</style>
+const onFileChange = (event) => setFile(event.target.files && event.target.files[0]);
+function dropFile(event) {
+  isEnter.value = false;
+  setFile(event.dataTransfer.files && event.dataTransfer.files[0]);
+}
+
+async function onSubmitImportExcel() {
+  if (!fileImported.value) return;
+  loadingUpload.value = true;
+  error.value = "";
+  done.value = false;
+  try {
+    const res = await uploadExcelEmployee(fileImported.value);
+    if (res.status === 201) done.value = true;
+    else error.value = (res.data && res.data.error) || "Không nhập được file. Vui lòng kiểm tra lại định dạng.";
+  } catch (e) {
+    error.value = (e.response && e.response.data && e.response.data.error) || "Không kết nối được máy chủ.";
+  }
+  loadingUpload.value = false;
+}
+</script>

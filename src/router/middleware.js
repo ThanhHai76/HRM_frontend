@@ -1,8 +1,8 @@
-export function checkAccessMiddleware(to, from, next) {
+// Chặn trang cần đăng nhập khi chưa có token; đã đăng nhập thì không vào lại trang login.
+export function checkAccessMiddleware(to) {
   const token = localStorage.getItem("token");
   const isAuthRoute = to.matched.some((item) => item.meta.isAuth);
-  if (isAuthRoute && token) return next();
-  if (token && to.name === "login") next({ name: "Home" });
-  if (isAuthRoute) return next({ name: "login" });
-  next();
+  if (isAuthRoute && !token) return { name: "login" };
+  if (token && to.name === "login") return { name: "Home" };
+  return true;
 }

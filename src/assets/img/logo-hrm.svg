@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 48" role="img" aria-label="HRM Recruitment">
+  <defs>
+    <linearGradient id="hrm-g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="12" fill="url(#hrm-g)"/>
+  <circle cx="22" cy="17" r="6.5" fill="#fff"/>
+  <path d="M9.5 38c0-7 5.6-11.5 12.5-11.5S34.5 31 34.5 38z" fill="#fff"/>
+  <circle cx="36" cy="33" r="8" fill="#10b981" stroke="#fff" stroke-width="2.5"/>
+  <path d="M32.2 33.2l2.6 2.6 4.6-5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="60" y="30" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="27" font-weight="800" letter-spacing="1" fill="#1f2937">HRM</text>
+  <text x="61" y="42" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="600" letter-spacing="2.2" fill="#6b7280">RECRUITMENT</text>
+</svg>

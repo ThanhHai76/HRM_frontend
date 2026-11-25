@@ -2,21 +2,12 @@
   <div class="page-wrapper">
     <div class="content container-fluid">
       <div class="row">
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="breadcrumb-path mb-4">
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a @click="$router.push('/')"
-                  ><img
-                    src="@/assets/img/dash.png"
-                    class="mr-2"
-                    alt="breadcrumb"
-                  />Home</a
-                >
-              </li>
-              <li class="breadcrumb-item active">Email Template</li>
-            </ul>
-            <h3>Email Template</h3>
+        <div class="col-12">
+          <div class="ui-page-head">
+            <div>
+              <h2>Email mẫu</h2>
+              <p>Soạn và quản lý các mẫu email gửi ứng viên (mời phỏng vấn, offer, cảm ơn…).</p>
+            </div>
           </div>
         </div>
         <div class="col-xl-12 col-sm-12 col-12">
@@ -305,45 +296,42 @@
   </div>
 </template>
 
-<script>
-import {
-  getAllTemplateEmails,
-  createTemplateEmail,
-  sendEmail,
-  updateTemplateEmail,
-  deleteTemplateEmail,
-  uploadImage,
-} from "@/services/email-service";
+<script setup>
+// Trang Email Template (đang tạm ẩn khỏi menu và router)
+import { computed, onMounted, ref, watch } from "vue";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import ImageUploader from "quill-image-uploader";
-// import { ImageResize } from 'quill-image-resize-module';
-import Loading from 'vue-loading-overlay';
+import Loading from "vue-loading-overlay";
+import {
+  getAllTemplateEmails,
+  createTemplateEmail as apiCreateTemplate,
+  sendEmail as apiSendEmail,
+  updateTemplateEmail as apiUpdateTemplate,
+  deleteTemplateEmail as apiDeleteTemplate,
+  uploadImage,
+} from "@/services/email-service";
+import { copyText } from "@/utils/format";
 
 const toolbarSettings = {
   container: [
-    // [{ placeholder: ["[GuestName]", "[HotelName]"] }], // my custom dropdown
-    ["bold", "italic", "underline", "strike"], // toggled buttons
+    ["bold", "italic", "underline", "strike"],
     ["blockquote", "code-block"],
-
-    [{ header: 1 }, { header: 2 }], // custom button values
+    [{ header: 1 }, { header: 2 }],
     [{ list: "ordered" }, { list: "bullet" }],
-    [{ script: "sub" }, { script: "super" }], // superscript/subscript
-    [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-    [{ direction: "rtl" }], // text direction
-
-    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+    [{ script: "sub" }, { script: "super" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ direction: "rtl" }],
+    [{ size: ["small", false, "large", "huge"] }],
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ color: [] }, { background: [] }],
     [{ font: [] }],
     [{ align: [] }],
     ["link", "image"],
-
-    ["clean"], // remove formatting button
+    ["clean"],
   ],
   handlers: {
-    placeholder: function (value) {
+    placeholder(value) {
       if (value) {
         const cursorPosition = this.quill.getSelection().index;
         this.quill.insertText(cursorPosition, value);
@@ -375,225 +363,160 @@ const editorOption = {
       ["link", "image"],
     ],
     imageResize: {
-      displayStyles: {
-        backgroundColor: "black",
-        border: "none",
-        color: "white",
-      },
-      modules: ["Toolbar", "Resize", "DisplaySize"], // ,
+      displayStyles: { backgroundColor: "black", border: "none", color: "white" },
+      modules: ["Toolbar", "Resize", "DisplaySize"],
     },
   },
 };
 
-export default {
-  name: "SendMail",
-  components: {
-    QuillEditor,
-    Loading,
-  },
-  setup: () => {
-    const modules = {
-      name: "imageUploader",
-      module: ImageUploader,
-      options: {
-        upload: (file) => {
-          return new Promise((resolve, reject) => {
-            uploadImage(file)
-              .then((res) => {
-                resolve(res.data.data);
-              })
-              .catch((err) => {
-                reject("Upload failed");
-                console.error("Error:", err);
-              });
-          });
-        },
-      },
-    };
-    return { modules };
-  },
-  data() {
-    return {
-      toolbarSettings,
-      editorOption,
-      editorContent: "",
-      mailForm: {
-        subject: "",
-        email: "",
-        cc: "",
-        bcc: "",
-        content: "",
-      },
-      listTemplateEmail: [],
-      messageNoti: "",
-      isShowModalNotify: false,
-      isShowModalDelete: false,
-      loadingCreate: false,
-      loadingUpdate: false,
-      searchWord: "",
-      selectedItem: {
-        subject: "",
-        email: "",
-        cc: "",
-        bcc: "",
-        content: "",
-      },
-      isLoadingPage: false,
-      isShowModalSendEmail: false,
-      checkSwitch: {
-        cc: false,
-        bcc: false,
-      },
-      linkImage: "",
-    };
-  },
-  watch: {
-    "checkSwitch.cc"() {
-      if (!this.checkSwitch.cc) this.mailForm.cc = "";
-    },
-    "checkSwitch.bcc"() {
-      if (!this.checkSwitch.bcc) this.mailForm.bcc = "";
-    },
-    "selectedItem.cc"() {
-      if (this.selectedItem.cc) this.checkSwitch.cc = true;
-      else this.checkSwitch.cc = false;
-    },
-    "selectedItem.bcc"() {
-      if (this.selectedItem.bcc) this.checkSwitch.bcc = true;
-      else this.checkSwitch.bcc = false;
-    },
-  },
-  async mounted() {
-    this.isLoadingPage = true;
-    await this.fetchAllTemplateEmails();
-    this.isLoadingPage = false;
-  },
-  computed: {
-    listTemplateEmailFilter() {
-      const trimWord = this.searchWord.toUpperCase().trim();
-      return this.listTemplateEmail.filter(
-        ({ subject, content, email }) =>
-          (subject || "").toUpperCase().includes(trimWord) ||
-          (content || "").toUpperCase().includes(trimWord) ||
-          (email || "").toUpperCase().includes(trimWord)
-      );
-    },
-  },
-  methods: {
-    async fetchAllTemplateEmails() {
-      const { data } = await getAllTemplateEmails();
-      this.listTemplateEmail = data;
-    },
-    onTextChange() {},
-    onEditorChange() {},
-    onContentUpdate() {},
-    getHTMLContent(sendMail = false) {
-      // Access the VueQuill component instance using the ref
-      const quillInstance = this.$refs.quillEditor;
-
-      // Do something with the HTML content
-      const htmlContent = quillInstance.getHTML();
-      const sanitizedContent = htmlContent
-        .replaceAll('class="ql-align-left">', 'style="text-align:left;">')
-        .replaceAll('class="ql-align-center">', 'style="text-align:center;">')
-        .replaceAll('class="ql-align-right">', 'style="text-align:right;">');
-      this.mailForm.content = sendMail ? sanitizedContent : htmlContent;
-    },
-    selectItemToShow(item) {
-      this.selectedItem = item;
-      this.mailForm = {
-        subject: this.selectedItem.subject,
-        email: this.selectedItem.email,
-        cc: this.selectedItem.cc || "",
-        bcc: this.selectedItem.bcc || "",
-        content: this.selectedItem.content,
-      };
-      const quillInstance = this.$refs.quillEditor;
-      quillInstance.setHTML(this.selectedItem.content);
-    },
-    async createTemplateEmail() {
-      this.getHTMLContent();
-      if (!this.checkFillForm()) return;
-      this.loadingCreate = true;
-      const { status } = await createTemplateEmail(this.mailForm);
-      await this.fetchAllTemplateEmails();
-      this.loadingCreate = false;
-      if (status === 200) {
-        this.isShowModalNotify = true;
-        this.messageNoti = "Create A Email Template Successfully !";
-      }
-    },
-    async updateTemplateEmail() {
-      this.getHTMLContent();
-      if (!this.checkFillForm()) return;
-      this.loadingUpdate = true;
-      const { status } = await updateTemplateEmail(
-        this.selectedItem._id,
-        this.mailForm
-      );
-      await this.fetchAllTemplateEmails();
-      this.loadingUpdate = false;
-      if (status === 200) {
-        this.isShowModalNotify = true;
-        this.messageNoti = "Update This Template Email Successfully !";
-      }
-    },
-    checkFillForm() {
-      if (
-        !this.mailForm.subject ||
-        !this.mailForm.email ||
-        !this.mailForm.content
-      ) {
-        this.isShowModalNotify = true;
-        this.messageNoti = "Please enter info";
-        return false;
-      }
-      return true;
-    },
-    onCopy(message) {
-      this.$copyText(message).then(function () {
-        alert("Copied");
-      });
-    },
-    onDeleteTemplate(item) {
-      this.isShowModalDelete = true;
-      this.selectedItem = item;
-    },
-    async confirmDeleteTemplate() {
-      this.isLoadingPage = true;
-      const status = await deleteTemplateEmail(this.selectedItem._id);
-      await this.fetchAllTemplateEmails();
-      this.isShowModalDelete = false;
-      if (status === 200) {
-        this.isShowModalNotify = true;
-        this.messageNoti = "Deleted successfully";
-      }
-      this.isLoadingPage = false;
-    },
-    onSendTemplateEmail() {
-      this.isShowModalSendEmail = true;
-    },
-    async sendEmail() {
-      this.getHTMLContent({ sendMail: true });
-      if (!this.checkFillForm()) return;
-      this.isLoadingPage = true;
-      const { status } = await sendEmail(this.mailForm);
-      await this.fetchAllTemplateEmails();
-      this.isLoadingPage = false;
-      if (status === 200) {
-        this.isShowModalNotify = true;
-        this.messageNoti = `Sent A Email to ${this.mailForm.email} Successfully !`;
-      }
-    },
-    handleImageAdded(file, Editor, cursorLocation, resetUploader) {
-      this.isLoadingPage = true;
-      // Add the image to the editor
-      Editor.insertEmbed(cursorLocation, 'image', file);
-      resetUploader();
-      this.isLoadingPage = false;
-    },
+// Tải ảnh trong nội dung email lên máy chủ
+const modules = {
+  name: "imageUploader",
+  module: ImageUploader,
+  options: {
+    upload: (file) =>
+      uploadImage(file)
+        .then((res) => res.data.data)
+        .catch((err) => {
+          console.error("Error:", err);
+          return Promise.reject("Upload failed");
+        }),
   },
 };
+
+const emptyMail = () => ({ subject: "", email: "", cc: "", bcc: "", content: "" });
+
+const quillEditor = ref(null);
+const editorContent = ref("");
+const mailForm = ref(emptyMail());
+const listTemplateEmail = ref([]);
+const messageNoti = ref("");
+const isShowModalNotify = ref(false);
+const isShowModalDelete = ref(false);
+const loadingCreate = ref(false);
+const loadingUpdate = ref(false);
+const searchWord = ref("");
+const selectedItem = ref(emptyMail());
+const isLoadingPage = ref(false);
+const isShowModalSendEmail = ref(false);
+const checkSwitch = ref({ cc: false, bcc: false });
+
+watch(() => checkSwitch.value.cc, (on) => {
+  if (!on) mailForm.value.cc = "";
+});
+watch(() => checkSwitch.value.bcc, (on) => {
+  if (!on) mailForm.value.bcc = "";
+});
+watch(() => selectedItem.value.cc, (cc) => (checkSwitch.value.cc = !!cc));
+watch(() => selectedItem.value.bcc, (bcc) => (checkSwitch.value.bcc = !!bcc));
+
+const listTemplateEmailFilter = computed(() => {
+  const word = searchWord.value.toUpperCase().trim();
+  return listTemplateEmail.value.filter(({ subject, content, email }) =>
+    [subject, content, email].some((v) => (v || "").toUpperCase().includes(word))
+  );
+});
+
+async function fetchAllTemplateEmails() {
+  const { data } = await getAllTemplateEmails();
+  listTemplateEmail.value = data;
+}
+
+const onTextChange = () => {};
+const onEditorChange = () => {};
+const onContentUpdate = () => {};
+
+// Lấy HTML từ trình soạn thảo; khi gửi mail thì đổi class căn lề của Quill thành style inline
+function getHTMLContent(forSending = false) {
+  const htmlContent = quillEditor.value.getHTML();
+  const sanitized = htmlContent
+    .replaceAll('class="ql-align-left">', 'style="text-align:left;">')
+    .replaceAll('class="ql-align-center">', 'style="text-align:center;">')
+    .replaceAll('class="ql-align-right">', 'style="text-align:right;">');
+  mailForm.value.content = forSending ? sanitized : htmlContent;
+}
+
+function selectItemToShow(item) {
+  selectedItem.value = item;
+  mailForm.value = { subject: item.subject, email: item.email, cc: item.cc || "", bcc: item.bcc || "", content: item.content };
+  quillEditor.value.setHTML(item.content);
+}
+
+function checkFillForm() {
+  const f = mailForm.value;
+  if (!f.subject || !f.email || !f.content) {
+    isShowModalNotify.value = true;
+    messageNoti.value = "Please enter info";
+    return false;
+  }
+  return true;
+}
+
+function notify(text) {
+  isShowModalNotify.value = true;
+  messageNoti.value = text;
+}
+
+async function createTemplateEmail() {
+  getHTMLContent();
+  if (!checkFillForm()) return;
+  loadingCreate.value = true;
+  const { status } = await apiCreateTemplate(mailForm.value);
+  await fetchAllTemplateEmails();
+  loadingCreate.value = false;
+  if (status === 200) notify("Create A Email Template Successfully !");
+}
+
+async function updateTemplateEmail() {
+  getHTMLContent();
+  if (!checkFillForm()) return;
+  loadingUpdate.value = true;
+  const { status } = await apiUpdateTemplate(selectedItem.value._id, mailForm.value);
+  await fetchAllTemplateEmails();
+  loadingUpdate.value = false;
+  if (status === 200) notify("Update This Template Email Successfully !");
+}
+
+function onCopy(text) {
+  copyText(text).then(() => alert("Copied")).catch(() => {});
+}
+
+function onDeleteTemplate(item) {
+  isShowModalDelete.value = true;
+  selectedItem.value = item;
+}
+
+async function confirmDeleteTemplate() {
+  isLoadingPage.value = true;
+  const status = await apiDeleteTemplate(selectedItem.value._id);
+  await fetchAllTemplateEmails();
+  isShowModalDelete.value = false;
+  if (status === 200) notify("Deleted successfully");
+  isLoadingPage.value = false;
+}
+
+const onSendTemplateEmail = () => (isShowModalSendEmail.value = true);
+
+async function sendEmail() {
+  getHTMLContent(true);
+  if (!checkFillForm()) return;
+  isLoadingPage.value = true;
+  const { status } = await apiSendEmail(mailForm.value);
+  await fetchAllTemplateEmails();
+  isLoadingPage.value = false;
+  if (status === 200) notify(`Sent A Email to ${mailForm.value.email} Successfully !`);
+}
+
+function handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+  Editor.insertEmbed(cursorLocation, "image", file);
+  resetUploader();
+}
+
+onMounted(async () => {
+  isLoadingPage.value = true;
+  await fetchAllTemplateEmails();
+  isLoadingPage.value = false;
+});
 </script>
 
 <style scoped lang="scss">

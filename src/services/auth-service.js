@@ -1,4 +1,5 @@
 import HTTP from "@/services/api-service.js";
+import { useAuthStore } from "@/stores/auth";
 
 async function getUser() {
   const { data } = await HTTP.get("/users");
@@ -15,15 +16,12 @@ async function register(dataSubmit) {
   return { data, status };
 }
 
-async function setAuthData(accessToken, userData) {
-  localStorage.setItem("token", accessToken);
-  localStorage.setItem("userData", JSON.stringify(userData));
-  // $store.commit('user/SET_CURRENT_USER', userData)
+function setAuthData(accessToken, userData) {
+  useAuthStore().set(accessToken, userData);
 }
 
-async function resetAuthData() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("userData");
+function resetAuthData() {
+  useAuthStore().clear();
 }
 
 export { getUser, login, register, setAuthData, resetAuthData };

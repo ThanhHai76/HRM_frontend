@@ -1,505 +1,72 @@
 <template>
   <div class="page-wrapper">
-    <div class="content container-fluid">
-      <div class="row">
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="breadcrumb-path mb-4">
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a @click="$router.push('/tracking-candidates')">Tracking</a>
-              </li>
-              <li class="breadcrumb-item active">Edit Tracking Candidate</li>
-            </ul>
-            <h3>Edit Tracking Candidate</h3>
-          </div>
+    <div class="ui-page">
+      <div class="ui-page-head">
+        <div>
+          <h2>Chỉnh sửa tracking</h2>
+          <p v-if="track">{{ track.name }}</p>
         </div>
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-titles">Basic Infomation</h2>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Ngày về/ Nhập CV</label>
-                    <VueDatePicker
-                      v-model="dataTracking.cvDate"
-                      :enable-time-picker="false"
-                      placeholder="Ngày về/ Nhập CV"
-                    ></VueDatePicker>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Job</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.job"
-                      placeholder="Job"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Họ và tên</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.name"
-                      placeholder="Họ và tên"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">SĐT</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.phone"
-                      placeholder="SĐT"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Địa chỉ Email</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.email"
-                      placeholder="Địa chỉ Email"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Link CV</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.linkCV"
-                      placeholder="Link CV"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-titles">Interview Details</h2>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Ngày PV</label>
-                    <VueDatePicker
-                      v-model="dataTracking.interviewDate"
-                      :enable-time-picker="false"
-                      placeholder="Ngày PV"
-                    ></VueDatePicker>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Thời gian PV vòng 1</label>
-                    <VueDatePicker
-                      v-model="dataTracking.interviewTime"
-                      placeholder="Thời gian PV vòng 1"
-                    ></VueDatePicker>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Người PV</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.interviewer"
-                      placeholder="Người PV"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Phòng PV</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.interviewRoom"
-                      placeholder="Phòng PV"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Team</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.team"
-                      placeholder="Team"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Thay đổi thời gian PV</label>
-                    <VueDatePicker
-                      v-model="dataTracking.interviewTimeChange"
-                      placeholder="Thay đổi thời gian PV"
-                    ></VueDatePicker>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Tình trạng tham gia PV V1</label>
-                    <b-form-select
-                      placeholder="Tình trạng tham gia PV V1"
-                      v-model="dataTracking.joinRound1Status"
-                      :options="interviewOptions"
-                    ></b-form-select>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Test/ PV vòng 2</label>
-                    <b-form-select
-                      placeholder="Test/ PV vòng 2"
-                      v-model="dataTracking.testInterviewRound2"
-                      :options="testInterviewRound2Options"
-                    ></b-form-select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Tình trạng tham gia vòng 2</label>
-                    <b-form-select
-                      placeholder="Tình trạng tham gia vòng 2"
-                      v-model="dataTracking.joinRound2Status"
-                      :options="joinRound2StatusOptions"
-                    ></b-form-select>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Đánh giá</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.evaluation"
-                      placeholder="Đánh giá"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Kết quả PV</label>
-                    <b-form-select
-                      placeholder="Kết quả PV"
-                      v-model="dataTracking.interviewResult"
-                      :options="interviewResultOptions"
-                    ></b-form-select>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Ngày chốt KQPV</label>
-                    <VueDatePicker
-                      v-model="dataTracking.interviewResultClosingDate"
-                      :enable-time-picker="false"
-                      placeholder="Ngày chốt KQPV"
-                    ></VueDatePicker>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Kết quả offer</label>
-                    <b-form-select
-                      placeholder="Kết quả offer"
-                      v-model="dataTracking.offerResult"
-                      :options="interviewResultOptions"
-                    ></b-form-select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="card-titles">Tracking</h2>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Lương chính thức</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.officialSalary"
-                      placeholder="Lương chính thức"
-                    />
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Lương thử việc</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.probationarySalary"
-                      placeholder="Lương thử việc"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Ngày bắt đầu đi làm</label>
-                    <VueDatePicker
-                      v-model="dataTracking.startWorkDate"
-                      placeholder="Ngày bắt đầu đi làm"
-                    ></VueDatePicker>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Thời gian thử việc</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.probationaryTime"
-                      placeholder="Thời gian thử việc"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Ngày hết thử việc</label>
-                    <VueDatePicker
-                      v-model="dataTracking.probationaryEndDate"
-                      placeholder="Ngày hết thử việc"
-                    ></VueDatePicker>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Đi mail</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.sendMail"
-                      placeholder="Đi mail "
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Tình trạng thử việc</label>
-                    <b-form-select
-                      placeholder="Tình trạng thử việc"
-                      v-model="dataTracking.probationStatus"
-                      :options="probationStatusOptions"
-                    ></b-form-select>
-                  </div>
-                </div>
-                <div class="col-xl-6 col-sm-12 col-12">
-                  <div class="form-group">
-                    <label class="label">Update tình trạng</label>
-                    <input
-                      type="text"
-                      v-model="dataTracking.statusUpdate"
-                      placeholder="Update tình trạng"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="row">
-            <div class="col-xl-12 col-sm-12 col-12">
-              <div class="form-btn">
-                <a @click="onEditTracking" class="btn btn-apply w-auto">
-                  <b-spinner
-                    v-if="isCreating"
-                    variant="success"
-                    label="Spinning"
-                  ></b-spinner>
-                  <span v-else>Save</span>
-                </a>
-                <a @click="onCancel" class="btn btn-secondary">Cancel</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <b-modal
-          id="modal-cancel"
-          centered
-          title="Confirm cancel"
-          v-model="isShowModalCancel"
-          @ok="$router.push('/tracking-candidates')"
-          ok-title="Confirm"
-        >
-          <div>
-            <p>{{ messageNoti }}</p>
-          </div>
-        </b-modal>
-
-        <b-modal
-          id="modal-success"
-          centered
-          title="Notify"
-          v-model="isShowModalSuccess"
-          @ok="$router.push('/tracking-candidates')"
-          ok-title="Confirm"
-        >
-          <div>
-            <p>{{ messageNoti }}</p>
-          </div>
-        </b-modal>
       </div>
+
+      <div v-if="loading" class="ui-card ui-empty"><span class="ui-spin"></span></div>
+      <div v-else-if="loadError" class="ui-notice error"><i class="fas fa-exclamation-triangle"></i><div>{{ loadError }}</div></div>
+
+      <tracking-form
+        v-else
+        :model-value="track"
+        submit-label="Lưu thay đổi"
+        :loading="isEditing"
+        :submit-error="submitError"
+        @submit="onEditTracking"
+        @cancel="isShowModalCancel = true"
+      />
+
+      <b-modal centered title="Xác nhận hủy" v-model="isShowModalCancel" @ok="$router.push('/tracking-candidates')" ok-title="Hủy chỉnh sửa" cancel-title="Quay lại">
+        <p>Bạn có chắc muốn hủy? Các thay đổi chưa lưu sẽ mất.</p>
+      </b-modal>
+      <b-modal centered title="Thông báo" v-model="isShowModalSuccess" @hidden="$router.push('/tracking-candidates')" ok-only ok-title="Về danh sách">
+        <p>Đã cập nhật tracking.</p>
+      </b-modal>
     </div>
   </div>
 </template>
 
-<script>
-import { updateTrack, getTrack } from "@/services/track-service";
+<script setup>
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import TrackingForm from "@/components/TrackingForm.vue";
+import { getTrack, updateTrack } from "@/services/track-service";
 
-export default {
-  name: "AddTracking",
-  data() {
-    return {
-      dataTracking: {
-        job: "",
-        cvDate: "",
-        name: "",
-        phone: "",
-        email: "",
-        linkCV: "",
-        interviewDate: "",
-        interviewTime: "",
-        interviewer: "",
-        interviewRoom: "",
-        team: "",
-        interviewTimeChange: "",
-        joinRound1Status: "",
-        testInterviewRound2: "",
-        joinRound2Status: "",
-        evaluation: "",
-        interviewResult: "",
-        interviewResultClosingDate: "",
-        offerResult: "",
-        officialSalary: "",
-        probationarySalary: "",
-        startWorkDate: "",
-        probationaryTime: "",
-        probationaryEndDate: "",
-        sendMail: "",
-        probationStatus: "",
-        statusUpdate: "",
-      },
-      isShowModalCancel: false,
-      isShowModalSuccess: false,
-      messageNoti: "",
-      isCreating: false,
-      interviewOptions: [
-        { value: "Đến", text: "Đến" },
-        { value: "Đến muộn", text: "Đến muộn" },
-        { value: "Cancel", text: "Cancel" },
-      ],
-      testInterviewRound2Options: [
-        { value: "Test", text: "Test" },
-        { value: "PV V2", text: "PV V2" },
-        { value: "Không", text: "Không" },
-      ],
-      joinRound2StatusOptions: [
-        { value: "Yes", text: "Yes" },
-        { value: "No", text: "No" },
-      ],
-      interviewResultOptions: [
-        { value: "Pass", text: "Pass" },
-        { value: "Fail", text: "Fail" },
-      ],
-      probationStatusOptions: [
-        { value: "Đang thử việc", text: "Đang thử việc" },
-        { value: "Từ chối việc", text: "Từ chối việc" },
-        { value: "Nghỉ việc", text: "Nghỉ việc" },
-        { value: "Fail thử việc", text: "Fail thử việc" },
-        { value: "Pass việc", text: "Pass việc" },
-        { value: "Thực tập", text: "Thực tập" },
-        { value: "Chưa đi làm", text: "Chưa đi làm" },
-      ],
-    };
-  },
-  mounted() {
-    this.getDataTracking();
-  },
-  methods: {
-    async getDataTracking() {
-      const { data } = await getTrack(this.$route.params.id);
-      this.dataTracking = { ...this.dataTracking, ...data };
-    },
-    async onEditTracking() {
-        this.isCreating = true;
-      const { status } = await updateTrack(this.$route.params.id, this.dataTracking);
-      if (status === 200) {
-        this.isShowModalSuccess = true;
-        this.messageNoti = "Add a tracking candidate successfully";
-      }
-      this.isCreating = false;
-    },
-    onCancel() {
-      this.isShowModalCancel = true;
-      this.messageNoti = "Are you sure you want to cancel";
-    },
-  },
-};
+const route = useRoute();
+const track = ref(null);
+const loading = ref(true);
+const loadError = ref("");
+const isEditing = ref(false);
+const isShowModalCancel = ref(false);
+const isShowModalSuccess = ref(false);
+const submitError = ref("");
+
+onMounted(async () => {
+  try {
+    const { data } = await getTrack(route.params.id);
+    if (!data) loadError.value = "Không tìm thấy bản ghi.";
+    track.value = data;
+  } catch {
+    loadError.value = "Không tải được dữ liệu.";
+  }
+  loading.value = false;
+});
+
+async function onEditTracking(payload) {
+  isEditing.value = true;
+  submitError.value = "";
+  try {
+    const { status } = await updateTrack(route.params.id, payload);
+    if (status === 200) isShowModalSuccess.value = true;
+    else submitError.value = "Không lưu được thay đổi. Vui lòng thử lại.";
+  } catch {
+    submitError.value = "Không kết nối được máy chủ.";
+  }
+  isEditing.value = false;
+}
 </script>
-
-<style scoped lang="scss">
-.form-group textarea {
-  padding: 20px;
-
-  &:focus {
-    border: 1px solid #ebecf1 !important;
-  }
-}
-.form-group {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  input,
-  select {
-    height: 40px;
-  }
-}
-.label {
-  padding-right: 20px;
-  text-align: left;
-  width: 150px;
-}
-input {
-  height: 38px !important;
-}
-</style>

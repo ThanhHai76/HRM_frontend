@@ -2,21 +2,12 @@
   <div class="page-wrapper">
     <div class="content container-fluid">
       <div class="row">
-        <div class="col-xl-12 col-sm-12 col-12">
-          <div class="breadcrumb-path mb-4">
-            <ul class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a @click="$router.push('/')"
-                  ><img
-                    src="@/assets/img/dash.png"
-                    class="mr-2"
-                    alt="breadcrumb"
-                  />Home</a
-                >
-              </li>
-              <li class="breadcrumb-item active">Report</li>
-            </ul>
-            <h3>Reports</h3>
+        <div class="col-12">
+          <div class="ui-page-head">
+            <div>
+              <h2>Báo cáo tuyển dụng</h2>
+              <p>Thống kê theo vị trí và nguồn ứng viên, theo tháng, quý hoặc năm. Có thể xuất ra Excel.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -29,30 +20,17 @@
             <div class="d-flex">
               <div class="button">
                 <b-dropdown
-                  id="dropdown-2"
+                  id="dropdown-year"
                   :text="`Năm ${yearReport}`"
                   variant="outline"
                   class="m-md-2"
                 >
                   <b-dropdown-item
-                    :active="yearReport === '2021'"
-                    @click="changeYear('2021')"
-                    >Năm 2021</b-dropdown-item
-                  >
-                  <b-dropdown-item
-                    :active="yearReport === '2022'"
-                    @click="changeYear('2022')"
-                    >Năm 2022</b-dropdown-item
-                  >
-                  <b-dropdown-item
-                    :active="yearReport === '2023'"
-                    @click="changeYear('2023')"
-                    >Năm 2023</b-dropdown-item
-                  >
-                  <b-dropdown-item
-                    :active="yearReport === '2024'"
-                    @click="changeYear('2024')"
-                    >Năm 2024</b-dropdown-item
+                    v-for="y in yearOptions"
+                    :key="y"
+                    :active="yearReport === y"
+                    @click="changeYear(y)"
+                    >Năm {{ y }}</b-dropdown-item
                   >
                 </b-dropdown>
               </div>
@@ -284,50 +262,10 @@
                   <tr v-for="(item, index) in dataReportShow" :key="index">
                     <td class="sticky-col first-col">{{ index + 1 }}</td>
 
-                    <td
-                      v-if="index === 0 && item.block === 'DỰ ÁN'"
-                      class="sticky-col second-col"
-                      rowspan="11"
-                      :style="{ background: '#C16C70' }"
-                    >
+                    <td class="sticky-col second-col">
                       <b>{{ item.block }}</b>
                     </td>
-                    <td
-                      v-else-if="item.block === 'Digital'"
-                      class="sticky-col second-col"
-                      :style="{ background: '#F6B26B' }"
-                    >
-                      <b>{{ item.block }}</b>
-                    </td>
-
-                    <td
-                      v-if="index === 0 && item.team === 'KAILAS MEDIA'"
-                      class="sticky-col third-col"
-                      rowspan="7"
-                      :style="{ background: '#DEEEB4' }"
-                    >
-                      <b>{{ item.team }}</b>
-                    </td>
-                    <td
-                      v-else-if="index === 9 && item.team === 'TĐCS'"
-                      class="sticky-col third-col"
-                      rowspan="2"
-                      :style="{ background: '#E7E7E7' }"
-                    >
-                      <b>{{ item.team }}</b>
-                    </td>
-                    <td
-                      v-else-if="['QTCS', 'GBD'].includes(item.team)"
-                      class="sticky-col third-col"
-                      :style="{ background: '#C1CBED' }"
-                    >
-                      <b>{{ item.team }}</b>
-                    </td>
-                    <td
-                      v-else-if="['Digital'].includes(item.team)"
-                      class="sticky-col third-col"
-                      :style="{ background: '#F6B26B' }"
-                    >
+                    <td class="sticky-col third-col">
                       <b>{{ item.team }}</b>
                     </td>
 
@@ -369,290 +307,123 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, ref } from "vue";
+import * as XLSX from "xlsx-js-style";
 import { getReportCurrentYear } from "@/services/employee-service";
 import { getAllJobs } from "@/services/job-service";
-import * as XLSX from "xlsx-js-style";
+import { currentYear, recentYears } from "@/utils/years";
 
-export default {
-  name: "ReportPage",
-  setup() {
-    return {};
-  },
-  data() {
+// Các nguồn CV có cột riêng trong báo cáo: khóa cột -> giá trị "Nguồn" trong dữ liệu
+const SOURCE_COLUMNS = { FBFree: "FB Free", TopCV: "TopCV", Refer: "Refer", YBOX: "YBOX", VNW: "VNW", FBAds: "FBAds", HH: "HH" };
+const QUARTER_MONTHS = { "Quý 1": ["01", "02", "03"], "Quý 2": ["04", "05", "06"], "Quý 3": ["07", "08", "09"], "Quý 4": ["10", "11", "12"] };
+
+const now = new Date();
+const dataReportFetch = ref([]);
+const downloadLink = ref("");
+const typeReport = ref("month");
+const yearReport = ref(currentYear());
+const typeQuarter = ref(`Quý ${Math.floor(now.getMonth() / 3) + 1}`);
+const typeMonth = ref(`Tháng ${String(now.getMonth() + 1).padStart(2, "0")}`);
+const dataListJobs = ref([]);
+const isLoading = ref(false);
+const tableRef = ref(null);
+
+const yearOptions = computed(() => recentYears(6));
+
+function formatMoney(number) {
+  if (!number) return "";
+  const [integerPart, decimalPart] = String(number).split(".");
+  const formatted = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return decimalPart ? formatted + "." + decimalPart : formatted + " VND";
+}
+
+const jobByName = (name) => dataListJobs.value.find((job) => job.jobName === name);
+
+// Dòng báo cáo lấy từ danh sách Job của công ty (+ các job có CV nhưng chưa có trong danh sách)
+const reportRows = computed(() => {
+  const rows = dataListJobs.value.map((job) => ({ block: job.block || "", team: job.team || "", job: job.jobName, jobRecruitment: job.jobName }));
+  const known = new Set(rows.map((r) => r.job));
+  const extra = [...new Set((dataReportFetch.value || []).map((c) => c.job).filter(Boolean))].filter((name) => !known.has(name));
+  return [...rows, ...extra.map((name) => ({ block: "", team: "", job: name, jobRecruitment: name }))];
+});
+
+// CV trong kỳ báo cáo (tháng / quý / năm)
+const dataReportFilter = computed(() => {
+  const all = dataReportFetch.value || [];
+  if (typeReport.value === "year") return all;
+  const months = typeReport.value === "month" ? [typeMonth.value.slice(-2)] : QUARTER_MONTHS[typeQuarter.value] || QUARTER_MONTHS["Quý 4"];
+  return all.filter((cv) => months.some((m) => (cv.cvDate || "").includes(`/${m}/${yearReport.value}`)));
+});
+
+const dataReportShow = computed(() =>
+  reportRows.value.map((item) => {
+    const job = jobByName(item.job);
+    const cvs = dataReportFilter.value.filter((cv) => cv.job === item.job);
+    const count = (pred) => cvs.filter(pred).length;
+    const orderQuantity = job && job.amount;
+    const goWork = count((cv) => cv.goWork === "Đi làm");
     return {
-      dataReport: [
-        {
-          block: "DỰ ÁN",
-          team: "KAILAS MEDIA",
-          job: "Kailas Biên kịch 01,2024",
-          jobRecruitment: "Kailas Biên kịch 01,2024",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "KAILAS MEDIA",
-          job: "Kailas Admin Fanpage 01.2024",
-          jobRecruitment: "Kailas Admin Fanpage 01.2024",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "KAILAS MEDIA",
-          job: "Kailas Content Creator DL",
-          jobRecruitment: "Kailas Content Creator DL",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "KAILAS MEDIA",
-          job: "Quản trị Tiktok",
-          jobRecruitment: "Quản trị Tiktok",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "KAILAS MEDIA",
-          job: "Kailas Admin hành chính",
-          jobRecruitment: "Kailas Admin hành chính",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "KAILAS MEDIA",
-          job: "Kailas Kế Toán",
-          jobRecruitment: "Kailas Kế Toán",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "KAILAS MEDIA",
-          job: "Kailas Dựng 01.2024",
-          jobRecruitment: "Kailas Dựng 01.2024",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "QTCS",
-          job: "QTCS BTV Part",
-          jobRecruitment: "QTCS BTV Part",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "GBD",
-          job: "Ghiền Video Editor",
-          jobRecruitment: "Ghiền Video Editor",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "TĐCS",
-          job: "TĐCS BTV Web 1.2024",
-          jobRecruitment: "TĐCS BTV 01.2024",
-        },
-        {
-          block: "DỰ ÁN",
-          team: "TĐCS",
-          job: "TĐCS Biên kịch 01.2024",
-          jobRecruitment: "TĐCS Biên kịch 01.2024",
-        },
-        {
-          block: "Digital",
-          team: "Digital",
-          job: "Senior Graphic Design",
-          jobRecruitment: "Senior Graphic Design",
-        },
-      ],
-      dataReportFetch: [],
-      downloadLink: "",
-      typeReport: "month",
-      yearReport: "2024",
-      typeQuarter: "Quý 1",
-      typeMonth: "Tháng 01",
-      dataListJobs: [],
-      isLoading: false,
+      ...item,
+      orderJobDate: job && job.orderDate,
+      orderQuantity,
+      personInCharge: "Tổng",
+      cvHR: cvs.length,
+      cvPass: count((cv) => cv.partMark === "Pass"),
+      pvRound1: count((cv) => cv.joinRound1 === "Đến"),
+      passRound1: count((cv) => cv.interviewV1 === "Pass"),
+      offer: count((cv) => cv.offer === "Đã gọi"),
+      goWork,
+      personnelAllocation: { HN: 0, SG: 0, total: 0 },
+      recruitMore: orderQuantity - goWork || 0,
+      jobState: "",
+      sourceHR: Object.fromEntries(Object.entries(SOURCE_COLUMNS).map(([key, source]) => [key, count((cv) => cv.source === source)])),
+      recruitFees: formatMoney(job && job.recruitmentCost),
+      recruitFeesCandidate: 0,
     };
-  },
-  computed: {
-    dataReportShow() {
-      const dataReport = this.dataReport.map((item) => {
-        const orderQuantity = this.dataListJobs.find(
-          (job) => job.jobName === item.job
-        )?.amount;
-        const goWork = this.dataReportFilter.filter(
-          (cvItem) => cvItem.job === item.job && cvItem.goWork === "Đi làm"
-        ).length;
-        return {
-          ...item,
-          orderJobDate: this.dataListJobs.find(
-            (job) => job.jobName === item.job
-          )?.orderDate,
-          orderQuantity: orderQuantity,
-          personInCharge: "Tổng",
-          cvHR: this.dataReportFilter.filter(
-            (cvItem) => cvItem.job === item.job
-          ).length,
-          cvPass: this.dataReportFilter.filter(
-            (cvItem) => cvItem.job === item.job && cvItem.partMark === "Pass"
-          ).length,
-          pvRound1: this.dataReportFilter.filter(
-            (cvItem) => cvItem.job === item.job && cvItem.joinRound1 === "Đến"
-          ).length,
-          passRound1: this.dataReportFilter.filter(
-            (cvItem) => cvItem.job === item.job && cvItem.interviewV1 === "Pass"
-          ).length,
-          offer: this.dataReportFilter.filter(
-            (cvItem) => cvItem.job === item.job && cvItem.offer === "Đã gọi"
-          ).length,
-          goWork: goWork,
-          personnelAllocation: {
-            HN: 0,
-            SG: 0,
-            total: 0,
-          },
-          recruitMore: orderQuantity - goWork || 0,
-          jobState: "",
-          sourceHR: {
-            FBFree: this.dataReportFilter.filter(
-              (cvItem) => cvItem.job === item.job && cvItem.source === "FB Free"
-            ).length,
-            TopCV: this.dataReportFilter.filter(
-              (cvItem) => cvItem.job === item.job && cvItem.source === "TopCV"
-            ).length,
-            Refer: this.dataReportFilter.filter(
-              (cvItem) => cvItem.job === item.job && cvItem.source === "Refer"
-            ).length,
-            YBOX: this.dataReportFilter.filter(
-              (cvItem) => cvItem.job === item.job && cvItem.source === "YBOX"
-            ).length,
-            VNW: this.dataReportFilter.filter(
-              (cvItem) => cvItem.job === item.job && cvItem.source === "VNW"
-            ).length,
-            FBAds: this.dataReportFilter.filter(
-              (cvItem) => cvItem.job === item.job && cvItem.source === "FBAds"
-            ).length,
-            HH: this.dataReportFilter.filter(
-              (cvItem) => cvItem.job === item.job && cvItem.source === "HH"
-            ).length,
-          },
-          recruitFees: this.formatMoney(
-            this.dataListJobs.find((job) => job.jobName === item.job)
-              ?.recruitmentCost
-          ),
-          recruitFeesCandidate: 0,
-        };
-      });
-      return dataReport;
-    },
-    dataReportFilter() {
-      if (this.typeReport === "year") return this.dataReportFetch;
-      return this.typeReport === "month"
-        ? this.dataMonthFilter
-        : this.dataQuarterFilter;
-    },
-    dataMonthFilter() {
-      const conditionFilter = this.typeMonth.substring(
-        this.typeMonth.length - 2,
-        this.typeMonth.length
-      );
-      return this.dataReportFetch.filter((cvItem) =>
-        cvItem.cvDate.includes(`/${conditionFilter}/${this.yearReport}`)
-      );
-    },
-    dataQuarterFilter() {
-      const checkCondition = (date) => {
-        if (this.typeQuarter === "Quý 1")
-          return (
-            date.includes(`/01/${this.yearReport}`) ||
-            date.includes(`/02/${this.yearReport}`) ||
-            date.includes(`/03/${this.yearReport}`)
-          );
-        if (this.typeQuarter === "Quý 2")
-          return (
-            date.includes(`/04/${this.yearReport}`) ||
-            date.includes(`/05/${this.yearReport}`) ||
-            date.includes(`/06/${this.yearReport}`)
-          );
-        if (this.typeQuarter === "Quý 3")
-          return (
-            date.includes(`/07/${this.yearReport}`) ||
-            date.includes(`/08/${this.yearReport}`) ||
-            date.includes(`/09/${this.yearReport}`)
-          );
-        return (
-          date.includes(`/10/${this.yearReport}`) ||
-          date.includes(`/11/${this.yearReport}`) ||
-          date.includes(`/12/${this.yearReport}`)
-        );
-      };
+  })
+);
 
-      return this.dataReportFetch.filter((cvItem) =>
-        checkCondition(cvItem.cvDate)
-      );
-    },
-    typeReportTextShow() {
-      if (this.typeReport === "quarter") return "Báo cáo quý";
-      if (this.typeReport === "year") return "Báo cáo năm";
-      return "Báo cáo tháng";
-    },
-  },
-  async mounted() {
-    this.isLoading = true;
-    await this.fetchDataReport();
-    await this.fetchDataListJobs();
-    this.isLoading = false;
-  },
-  methods: {
-    async fetchDataReport() {
-      const { data } = await getReportCurrentYear(this.yearReport);
-      this.dataReportFetch = data;
-    },
-    async fetchDataListJobs() {
-      const { data } = await getAllJobs();
-      this.dataListJobs = data;
-    },
-    exportToExcel() {
-      const wb = XLSX.utils.table_to_book(this.$refs.tableRef, {
-        sheet: "Sheet1",
-      });
-      const wbout = XLSX.write(wb, {
-        bookType: "xlsx",
-        bookSST: true,
-        type: "array",
-      });
-      const blob = new Blob([wbout], { type: "application/octet-stream" });
-      this.downloadLink = URL.createObjectURL(blob);
-    },
-    changeTypeReport(type) {
-      this.typeReport = type;
-    },
-    async changeYear(year) {
-      this.yearReport = year;
-      const { data } = await getReportCurrentYear(this.yearReport);
-      this.dataReportFetch = data;
-    },
-    changeQuarter(quarter) {
-      this.typeQuarter = quarter;
-    },
-    changeMonth(month) {
-      this.typeMonth = month;
-    },
-    getTotalColumn(keyColumn, keyColumnMore) {
-      if (keyColumnMore)
-        return this.dataReportShow.reduce(
-          (total, report) => total + (report[keyColumn][keyColumnMore] || 0),
-          0
-        );
-      return this.dataReportShow.reduce(
-        (total, report) => total + (report[keyColumn] || 0),
-        0
-      );
-    },
-    formatMoney(number) {
-      const [integerPart, decimalPart] = String(number).split(".");
-      const formattedIntegerPart = integerPart.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        "."
-      );
-      if (!number) return "";
-      return decimalPart
-        ? formattedIntegerPart + "." + decimalPart
-        : formattedIntegerPart + " VND";
-    },
-  },
-};
+const typeReportTextShow = computed(() => {
+  if (typeReport.value === "quarter") return "Báo cáo quý";
+  if (typeReport.value === "year") return "Báo cáo năm";
+  return "Báo cáo tháng";
+});
+
+function getTotalColumn(keyColumn, keyColumnMore) {
+  return dataReportShow.value.reduce((total, report) => total + ((keyColumnMore ? report[keyColumn][keyColumnMore] : report[keyColumn]) || 0), 0);
+}
+
+async function fetchDataReport() {
+  const { data } = await getReportCurrentYear(yearReport.value);
+  dataReportFetch.value = Array.isArray(data) ? data : [];
+}
+async function fetchDataListJobs() {
+  const { data } = await getAllJobs();
+  dataListJobs.value = Array.isArray(data) ? data : [];
+}
+
+function exportToExcel() {
+  const wb = XLSX.utils.table_to_book(tableRef.value, { sheet: "Sheet1" });
+  const wbout = XLSX.write(wb, { bookType: "xlsx", bookSST: true, type: "array" });
+  const blob = new Blob([wbout], { type: "application/octet-stream" });
+  downloadLink.value = URL.createObjectURL(blob);
+}
+
+const changeTypeReport = (type) => (typeReport.value = type);
+const changeQuarter = (quarter) => (typeQuarter.value = quarter);
+const changeMonth = (month) => (typeMonth.value = month);
+async function changeYear(year) {
+  yearReport.value = year;
+  await fetchDataReport();
+}
+
+onMounted(async () => {
+  isLoading.value = true;
+  await fetchDataReport();
+  await fetchDataListJobs();
+  isLoading.value = false;
+});
 </script>
 
 <style lang="scss" scoped>

@@ -2,12 +2,12 @@
   <div class="header">
     <div class="header-left">
       <a href="/" class="logo">
-        <img src="@/assets/img/SeaLinh.jpg" alt="Logo" />
+        <img class="brand-full" src="@/assets/img/logo-hrm.svg" alt="HRM Recruitment" />
       </a>
       <a href="/" class="logo logo-small">
-        <img src="@/assets/img/SeaLinh.jpg" alt="Logo" width="30" height="30" />
+        <img src="@/assets/img/logo-mark.svg" alt="HRM" width="34" height="34" />
       </a>
-      <a id="toggle_btn" v-b-toggle.sidebar-1>
+      <a id="toggle_btn" role="button" title="Thu gọn / mở menu" @click="$emit('toggle-sidebar')">
         <span class="bar-icon">
           <span></span>
           <span></span>
@@ -17,175 +17,6 @@
     </div>
 
     <ul class="nav user-menu">
-      <!-- <li class="nav-item dropdown">
-        <a
-          href="#"
-          class="dropdown-toggle nav-link pr-0"
-          data-toggle="dropdown"
-        >
-          <i data-feather="bell"></i> <span class="badge badge-pill"></span>
-        </a>
-        <div class="dropdown-menu notifications">
-          <div class="topnav-dropdown-header">
-            <span class="notification-title">Notifications</span>
-            <a href="javascript:void(0)" class="clear-noti"> Clear All</a>
-          </div>
-          <div class="noti-content">
-            <ul class="notification-list">
-              <li class="notification-message">
-                <a href="activities.html">
-                  <div class="media">
-                    <span class="avatar avatar-sm">
-                      <img
-                        class="avatar-img rounded-circle"
-                        alt=""
-                        src="@/assets/img/profiles/avatar-02.jpg"
-                      />
-                    </span>
-                    <div class="media-body">
-                      <p class="noti-details">
-                        <span class="noti-title">Brian Johnson</span> paid the
-                        invoice <span class="noti-title">#DF65485</span>
-                      </p>
-                      <p class="noti-time">
-                        <span class="notification-time">4 mins ago</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="notification-message">
-                <a href="activities.html">
-                  <div class="media">
-                    <span class="avatar avatar-sm">
-                      <img
-                        class="avatar-img rounded-circle"
-                        alt=""
-                        src="@/assets/img/profiles/avatar-03.jpg"
-                      />
-                    </span>
-                    <div class="media-body">
-                      <p class="noti-details">
-                        <span class="noti-title">Marie Canales</span> has
-                        accepted your estimate
-                        <span class="noti-title">#GTR458789</span>
-                      </p>
-                      <p class="noti-time">
-                        <span class="notification-time">6 mins ago</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="notification-message">
-                <a href="activities.html">
-                  <div class="media">
-                    <div class="avatar avatar-sm">
-                      <span class="avatar-title rounded-circle bg-primary-light"
-                        ><i class="far fa-user"></i
-                      ></span>
-                    </div>
-                    <div class="media-body">
-                      <p class="noti-details">
-                        <span class="noti-title">New user registered</span>
-                      </p>
-                      <p class="noti-time">
-                        <span class="notification-time">8 mins ago</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="notification-message">
-                <a href="activities.html">
-                  <div class="media">
-                    <span class="avatar avatar-sm">
-                      <img
-                        class="avatar-img rounded-circle"
-                        alt=""
-                        src="@/assets/img/profiles/avatar-04.jpg"
-                      />
-                    </span>
-                    <div class="media-body">
-                      <p class="noti-details">
-                        <span class="noti-title">Barbara Moore</span> declined
-                        the invoice <span class="noti-title">#RDW026896</span>
-                      </p>
-                      <p class="noti-time">
-                        <span class="notification-time">12 mins ago</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li class="notification-message">
-                <a href="activities.html">
-                  <div class="media">
-                    <div class="avatar avatar-sm">
-                      <span class="avatar-title rounded-circle bg-info-light"
-                        ><i class="far fa-comment"></i
-                      ></span>
-                    </div>
-                    <div class="media-body">
-                      <p class="noti-details">
-                        <span class="noti-title"
-                          >You have received a new message</span
-                        >
-                      </p>
-                      <p class="noti-time">
-                        <span class="notification-time">2 days ago</span>
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="topnav-dropdown-footer">
-            <a href="activities.html">View all Notifications</a>
-          </div>
-        </div>
-      </li> -->
-      <div class="d-flex align-items-center chat mr-4" @click="onClickShowChat">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          fill="currentColor"
-          class="bi bi-chat-heart"
-          viewBox="0 0 16 16"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2m-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125M8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132"
-          />
-        </svg>
-      </div>
-
-      <b-modal
-        id="modal-chat"
-        centered
-        title="Chat với Chat GPT"
-        v-model="isShowModalChat"
-        ok-title="Confirm"
-      >
-        <div>
-          <div
-            class="messages"
-            v-for="(msg, index) in messages"
-            :key="index"
-            :class="msg.role"
-          >
-            <div>{{ msg.text }}</div>
-          </div>
-          <input
-            v-model="message"
-            @keyup.enter="sendMessage"
-            placeholder="Ask ChatGPT..."
-          />
-        </div>
-      </b-modal>
-
       <div
         v-if="interviewList.length > 0"
         class="d-flex align-items-center notification-alarm mr-4"
@@ -272,7 +103,7 @@
       <li class="nav-item dropdown has-arrow main-drop">
         <a href="#" class="nav-link" data-toggle="dropdown">
           <span class="user-img">
-            <img src="@/assets/img/SeaLinh.jpg" alt="" />
+            <span class="avatar-ini user-avatar" :style="{ background: userAvatarColor }" :title="getUserName">{{ userInitials }}</span>
             <span class="status online"></span>
           </span>
         </a>
@@ -293,125 +124,71 @@
         </ul>
       </div>
     </ul>
-    <div class="dropdown mobile-user-menu show">
-      <a
-        href="#"
-        class="nav-link dropdown-toggle"
-        data-toggle="dropdown"
-        aria-expanded="false"
-        ><i class="fa fa-ellipsis-v"></i
-      ></a>
-      <div class="dropdown-menu dropdown-menu-right">
-        <a class="dropdown-item" href="profile.html">My Profile</a>
-        <a class="dropdown-item" href="settings.html">Settings</a>
-        <a class="dropdown-item" href="login.html">Logout</a>
-      </div>
-    </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { resetAuthData } from "@/services/auth-service";
 import { getAllTracks } from "@/services/track-service";
-import { sendChat } from "@/services/chat-service";
-import moment from "moment";
-import { mapGetters } from "vuex";
-export default {
-  name: "HeaderComponent",
-  data() {
-    return {
-      dataListTracks: [],
-      isShowModalProbationNotify: false,
-      isShowModalInterviewNotify: false,
-      isShowModalChat: false,
-      messages: [],
-      message: "",
-    };
-  },
-  computed: {
-    ...mapGetters(["getListTracks"]),
-    getUserName() {
-      return JSON.parse(localStorage.getItem("userData"))?.userName;
-    },
-    probationaryEndList() {
-      const currentTime = new Date().getTime();
-      const getTime = (time) => new Date(time).getTime();
-      return this.dataListTracks.filter(
-        (item) =>
-          currentTime + 5 * 24 * 60 * 60 * 1000 >
-            getTime(item.probationaryEndDate) &&
-          currentTime < getTime(item.probationaryEndDate)
-      );
-    },
-    interviewList() {
-      const currentTime = new Date();
-      return this.dataListTracks.filter(
-        (item) =>
-          this.formatDatePicker(currentTime) ===
-          this.formatDatePicker(item.interviewDate)
-      );
-    },
-  },
-  watch: {
-    getListTracks() {
-      this.dataListTracks = this.getListTracks;
-    },
-  },
-  mounted() {
-    this.fetchDataListTrack();
-  },
-  methods: {
-    async logout() {
-      await resetAuthData();
-      this.$router.push("/login");
-    },
-    async fetchDataListTrack() {
-      const { data } = await getAllTracks();
-      this.dataListTracks = data;
-    },
-    onClickAlarm() {
-      this.isShowModalProbationNotify = true;
-    },
-    onClickInterview() {
-      this.isShowModalInterviewNotify = true;
-    },
-    formatDatePicker(date) {
-      if (!date) return;
-      return moment(date).format("DD/MM/YYYY");
-    },
-    onClickShowChat() {
-      this.isShowModalChat = true;
-    },
-    async sendMessage() {
-      if (!this.message.trim()) return;
-      this.messages.push({ role: 'user', text: this.message });
-      const response = await sendChat(this.message);
-      this.messages.push({ role: 'bot', text: response.data });
-      this.message = '';
-    }
-  },
-};
+import { useAuthStore } from "@/stores/auth";
+import { useTrackingStore } from "@/stores/tracking";
+import { formatDate } from "@/utils/format";
+import { avatarColor, initials } from "@/utils/avatar";
+
+defineEmits(["toggle-sidebar"]);
+
+const router = useRouter();
+const auth = useAuthStore();
+const trackingStore = useTrackingStore();
+
+const dataListTracks = ref([]);
+const isShowModalProbationNotify = ref(false);
+const isShowModalInterviewNotify = ref(false);
+
+const getUserName = computed(() => auth.user && auth.user.userName);
+
+const userInitials = computed(() => initials(getUserName.value));
+const userAvatarColor = computed(() => avatarColor(getUserName.value));
+
+const formatDatePicker = (date) => (date ? formatDate(date) : undefined);
+
+// Sắp hết thử việc trong 5 ngày tới
+const probationaryEndList = computed(() => {
+  const now = Date.now();
+  const time = (t) => new Date(t).getTime();
+  return dataListTracks.value.filter((item) => now + 5 * 24 * 60 * 60 * 1000 > time(item.probationaryEndDate) && now < time(item.probationaryEndDate));
+});
+// Phỏng vấn hôm nay
+const interviewList = computed(() => {
+  const today = formatDatePicker(new Date());
+  return dataListTracks.value.filter((item) => today === formatDatePicker(item.interviewDate));
+});
+
+// Trang Tracking tải lại danh sách -> chuông cập nhật theo
+watch(() => trackingStore.list, (list) => {
+  if (list) dataListTracks.value = list;
+});
+
+onMounted(async () => {
+  const { data } = await getAllTracks();
+  dataListTracks.value = data || [];
+});
+
+const onClickAlarm = () => (isShowModalProbationNotify.value = true);
+const onClickInterview = () => (isShowModalInterviewNotify.value = true);
+
+function logout() {
+  resetAuthData();
+  router.push("/login");
+}
 </script>
 
 <style lang="scss" scoped>
 .notification-alarm {
   cursor: pointer;
   animation: shaking 0.5s infinite alternate;
-}
-
-.chat {
-  cursor: pointer;
-}
-
-.messages {
-  max-height: 400px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-input {
-  padding: 10px;
-  font-size: 16px;
 }
 
 .noti-red {
